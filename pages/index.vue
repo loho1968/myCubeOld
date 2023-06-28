@@ -68,45 +68,28 @@ useHead({
   title: "魔方练习",
 });
 import { Sunny, Moon, VideoPlay } from "@element-plus/icons-vue";
-import {
-  CFOP,
-  BlindFormulaGroup,
-  BlindFormulaCode,
-  BlindFormula,
-} from "@prisma/client";
+import type CFOP from "@prisma/client";
+import type BlindFormulaGroup from "@prisma/client";
+import type BlindFormulaCode from "@prisma/client";
+import type BlindFormula from "@prisma/client";
 
+//#region theme
 const darkTheme = ref(false);
 import { useDark, useToggle } from "@vueuse/core";
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
-
+//#endregion
 const dayjs = useDayjs();
 
 let tempFormula = ref("");
-
+const pageRows=ref(50);
 let cfopList: CFOP[] = [];
 let blindFormulaGroup: BlindFormulaGroup[] = [];
 let blindFormulaCode: BlindFormulaCode[] = [];
 let blindFormula: BlindFormula[] = [];
 
 //#endregion
-function sortBy(arr, rules) {
-  return arr.sort((a, b) => {
-    for (let i = 0; i < rules.length; i++) {
-      const [key, direction] = rules[i];
-      const order = direction === "desc" ? -1 : 1;
-      if (a[key] < b[key]) {
-        return -1 * order;
-      }
-      if (a[key] > b[key]) {
-        return 1 * order;
-      }
-    }
-    return 0;
-  });
-}
-
 await useFetch("/api/formula").then((res) => {
   const data = res.data["_rawValue"];
   if (data != null && data.code == 200) {
@@ -215,7 +198,6 @@ blindFormula = blindFormula.sort(function (a, b) {
   return 0;
 });
 
-console.log(blindFormula[0]);
 </script>
 
 <style scoped></style>
