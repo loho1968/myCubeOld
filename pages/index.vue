@@ -6,27 +6,54 @@
       >
         <div class="flex items-center">
           <div class="text-2xl mr-4">魔方学习</div>
+          <div class="w-32">
+            <el-select
+              v-model="typeValue"
+              class="m-2"
+              placeholder="Select"
+              size="small"
+            >
+              <el-option
+                v-for="item in blindFormulaType"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </div>
+          <div class="ml-2 flex items-center w-[164px]">
+            <p class="w-12">编码</p>
+            <div class="w-16">
+              <el-input
+                v-model="searchFormulaCode"
+                clearable
+                maxlength="2"
+                placeholder=""
+                size="small"
+              />
+            </div>
+          </div>
         </div>
         <div class=""></div>
         <div class="flex justify-between items-center">
           <div class="flex justify-between items-center">
             <el-input
               v-model="tempFormula"
-              placeholder="输入公式"
-              clearable
               class="mr-1"
+              clearable
+              placeholder="输入公式"
             />
-            <el-button size="default" :icon="VideoPlay" round>show</el-button>
+            <el-button :icon="VideoPlay" round size="default">show</el-button>
           </div>
           <div>
             <el-switch
               v-model="darkTheme"
-              style="margin-left: 24px"
-              size="large"
-              inline-prompt
               :active-icon="Sunny"
-              :inactive-icon="Moon"
               :change="toggleDark(darkTheme)"
+              :inactive-icon="Moon"
+              inline-prompt
+              size="large"
+              style="margin-left: 24px"
             />
           </div>
         </div>
@@ -35,14 +62,66 @@
     <div class="flex-1">
       <div class="flex flex-col justify-between h-full">
         <div class="flex justify-between h-full">
-          <div class="border-r-2 w-2/5">
+          <div class="border-r-2 w-2/5 mr-2">
             <div>
-              <el-table :data="blindFormula" border style="width: 100%" >
-                <el-table-column prop="Formula" label="公式" header-align="center"/>
-                <el-table-column prop="Code" label="编码" width="55" header-align="center"/>
-                <el-table-column prop="ThinkCode" label="助记码" width="100" header-align="center"/>
-                <el-table-column prop="ColorDesc" label="颜色" width="140" header-align="center"/>
+              <el-table
+                :data="showBlindFormulaList"
+                border
+                highlight-current-row
+                stripe
+                style="width: 100%"
+                @row-click="rowClick"
+              >
+                <el-table-column
+                  header-align="center"
+                  label="公式"
+                  prop="Formula"
+                />
+                <el-table-column
+                  header-align="center"
+                  label="编码"
+                  prop="Code"
+                  width="55"
+                />
+                <el-table-column
+                  header-align="center"
+                  label="助记码"
+                  prop="ThinkCode"
+                  width="100"
+                />
+                <el-table-column
+                  header-align="center"
+                  label="颜色"
+                  prop="ColorDesc"
+                  width="130"
+                />
+                <el-table-column label="" width="80">
+                  <template #default="scope">
+                    <el-button size="small" type="primary" @click=""
+                      >Edit</el-button
+                    >
+                  </template>
+                </el-table-column>
               </el-table>
+              <div
+                v-show="searchFormulaCode == ''"
+                class="example-pagination-block"
+              >
+                <!-- <div class="example-demonstration">分页</div> -->
+                <el-pagination
+                  v-model:current-page="currentPage"
+                  v-model:page-size="pageSize"
+                  :page-sizes="[20, 28, 50, 60]"
+                  :pager-count="5"
+                  :total="state.total"
+                  background
+                  hide-on-single-page
+                  layout="prev, pager, next ,total,sizes,jumper"
+                  small
+                  @current-change="handleCurrentChange"
+                  @size-change="handleSizeChange"
+                />
+              </div>
             </div>
           </div>
           <div class="mr-auto bg-blue-300">right</div>
@@ -60,34 +139,52 @@
   </div>
 </template>
 
+<!--suppress TypeScriptUnresolvedReference -->
 <script lang="ts" setup>
 //#region 基础:import 变量声明等
 import { forEach } from "lodash-es";
-
-useHead({
-  title: "魔方练习",
-});
-import { Sunny, Moon, VideoPlay } from "@element-plus/icons-vue";
+import { Moon, Sunny, VideoPlay } from "@element-plus/icons-vue";
 import type CFOP from "@prisma/client";
 import type BlindFormulaGroup from "@prisma/client";
 import type BlindFormulaCode from "@prisma/client";
 import type BlindFormula from "@prisma/client";
+import { useDark, useToggle } from "@vueuse/core";
+
+useHead({
+  title: "魔方练习",
+});
 
 //#region theme
 const darkTheme = ref(false);
-import { useDark, useToggle } from "@vueuse/core";
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 //#endregion
-const dayjs = useDayjs();
 
 let tempFormula = ref("");
-const pageRows=ref(50);
+const blindFormulaType = [
+  {
+    value: "棱块",
+    label: "棱块",
+  },
+  {
+    value: "角块",
+    label: "角块",
+  },
+];
+const typeValue = ref("棱块");
+const pageRows = ref(29);
+const searchFormulaCode = ref("");
+
 let cfopList: CFOP[] = [];
 let blindFormulaGroup: BlindFormulaGroup[] = [];
 let blindFormulaCode: BlindFormulaCode[] = [];
 let blindFormula: BlindFormula[] = [];
+const currentPage = ref(1);
+const pageSize = ref(28);
+//#endregion
+
+//#region 基础：函数
 
 //#endregion
 await useFetch("/api/formula").then((res) => {
@@ -103,6 +200,8 @@ await useFetch("/api/formula").then((res) => {
     }
   }
 });
+
+//#region 基础：计算盲拧公式颜色等
 let colorArr = [];
 for (let i = 0; i < blindFormula.length; i++) {
   let arr = blindFormula[i].Code.split("");
@@ -112,10 +211,12 @@ for (let i = 0; i < blindFormula.length; i++) {
     let formulaCode = blindFormulaCode.find(
       (r) => r.Code.indexOf(c) > -1 && r.Type == blindFormula[i].Type
     );
-    if (formulaCode != undefined) {
+
+    if (formulaCode.Code != undefined) {
       colorArr = formulaCode.Color.split("");
       const colorCode = formulaCode.Code.split("");
       let colorString = formulaCode.Color;
+
       if (blindFormula[i].Type == "棱块") {
         blindFormula[i].Colored += "/e";
 
@@ -157,7 +258,8 @@ for (let i = 0; i < blindFormula.length; i++) {
       }
 
       blindFormula[i].Colored += " " + formulaCode.LayerCode;
-      blindFormula[i].ColorDesc += "--" + colorString.replace(/ /g,'');
+      blindFormula[i].ColorDesc +=
+        "--" + colorString.replace(/ /g, "").replace(/,/g, "");
     }
   });
 
@@ -171,8 +273,6 @@ for (let i = 0; i < blindFormula.length; i++) {
   }
   arr = arr.reverse();
 }
-// blindFormula=sortBy(blindFormula,['Type','Code'])
-
 blindFormula = blindFormula.sort(function (a, b) {
   let x = a.Type.toLowerCase();
   let y = b.Type.toLowerCase();
@@ -197,7 +297,31 @@ blindFormula = blindFormula.sort(function (a, b) {
   }
   return 0;
 });
+//#endregion
 
+const state = reactive({
+  page: 1,
+  limit: pageRows.value,
+  total: blindFormula.length,
+});
+
+const showBlindFormulaList = computed(() => {
+  const result = blindFormula.filter((r) => r.Type == typeValue.value);
+  if (searchFormulaCode.value != "") {
+    return result.filter((r) => r.Code == searchFormulaCode.value);
+  }
+  return result.slice((state.page - 1) * state.limit, state.page * state.limit);
+});
+//改变页码
+const handleCurrentChange = (e) => {
+  state.page = e;
+};
+const handleSizeChange = (e) => {
+  state.limit = e;
+};
+const rowClick = (row, column, event) => {
+  console.log(row, column, event);
+};
 </script>
 
 <style scoped></style>
