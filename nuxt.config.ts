@@ -2,15 +2,22 @@
 // @ts-ignore
 // @ts-ignore
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  modules: [
+  css: [
+    '~/assets/css/tailwind.css',
+  ],
+  devtools: {enabled: true},
+  elementPlus: {
+    icon: 'ElIcon',
+    importStyle: 'css',
+    themes: ['dark'],
+  }, modules: [
     'dayjs-nuxt',
     '@pinia/nuxt',
     '@pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',
     '@element-plus/nuxt',
-  ],pinia: {
+  ], pinia: {
     autoImports: [
       // automatically imports `defineStore`
       'defineStore', // import { defineStore } from 'pinia'

@@ -29,6 +29,9 @@ dependencies:
   '@tailwindcss/typography':
     specifier: ^0.5.9
     version: 0.5.9(tailwindcss@3.3.2)
+  '@vueuse/core':
+    specifier: ^10.2.0
+    version: 10.2.0(vue@3.3.4)
   '@vueuse/nuxt':
     specifier: ^10.2.0
     version: 10.2.0(nuxt@3.6.1)(vue@3.3.4)
