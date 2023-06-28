@@ -124,7 +124,7 @@
               </div>
             </div>
           </div>
-          <div class="mr-auto bg-blue-300">right</div>
+          <div class="mr-auto bg-blue-300 w-full">right</div>
         </div>
       </div>
     </div>
