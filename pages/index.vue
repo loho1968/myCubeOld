@@ -1,45 +1,72 @@
 <template>
-    <div
-        class="flex flex-wrap items-center justify-between w-full mb-4 px-4 text-lg border-b-2 absolute top-0 left-0 bg-base-300"
-    >
-        <div class="text-2xl w-32">魔方学习
-        </div>
-        <div class="text-2xl w-32"></div>
+  <div class="common-layout">
+    <el-container>
+      <el-header>
         <div
-            class=""
+          class="flex flex-wrap items-center justify-between w-full mb-4 px-4 border-b-2 bg-base-300"
         >
-            <el-switch
+          <div class="flex items-center">
+            <div class="text-2xl mr-4">魔方学习</div>
+          </div>
+          <div class=""></div>
+          <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center">
+              <el-input
+                v-model="tempFormula"
+                placeholder="输入公式"
+                clearable
+                class="mr-1"
+              />
+              <el-button size="default" :icon="VideoPlay" round
+                >show</el-button
+              >
+            </div>
+            <div>
+              <el-switch
                 v-model="darkTheme"
-                class="mt-2"
                 style="margin-left: 24px"
                 size="large"
                 inline-prompt
                 :active-icon="Sunny"
                 :inactive-icon="Moon"
                 :change="toggleDark(darkTheme)"
-            />
+              />
+            </div>
+          </div>
         </div>
-    </div>
+      </el-header>
+      <el-main>
+        <div class="flex flex-col justify-between">
+          <div>
+            <el-text class="mx-1" type="primary"
+              >F-前面 B-后面 R-右面 L左面 U-上面 D-下面 S-中间 E-水平中间
+              M-垂直中间</el-text
+            >
+          </div>
+          <div>Main</div>
+        </div>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 
 <script lang="ts" setup>
+//#region 基础:import 变量声明等
 useHead({
-    title: '魔方练习'
+  title: "魔方练习",
 });
-import {Sunny,Moon} from "@element-plus/icons-vue";
+import { Sunny, Moon, VideoPlay } from "@element-plus/icons-vue";
 
-const darkTheme=ref(false)
-import { useDark, useToggle } from '@vueuse/core'
+const darkTheme = ref(false);
+import { useDark, useToggle } from "@vueuse/core";
 
-const isDark = useDark()
-const toggleDark = useToggle(isDark)
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
 
-const dayjs = useDayjs()
-const date = dayjs('2023-01-01')
-console.log(date.format('YYYY-MM-DD HH:mm:ss'))
+const dayjs = useDayjs();
+
+let tempFormula = ref("");
+//#endregion
 </script>
 
-<style scoped>
-
-
-</style>
+<style scoped></style>
