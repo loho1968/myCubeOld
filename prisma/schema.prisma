@@ -8,46 +8,48 @@ datasource db {
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-model BlindFormualGroup {
-  GroupName   String?
-  FormualCode String?
-  FormualKey  String?
-  GroupKey    String?
-
-  @@ignore
-}
-
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model BlindFormula {
   Type        String
   Code        String
-  ThinkCode   String?
+  ThinkCode   String
   ColorCode   String?
   Formula     String
   Colored     String?
-  FormualKey  String? @id
+  FormulaKey  String  @id @default(uuid())
   SameCode    String?
   ColorDesc   String?
   ReverseCode String?
 
-  @@ignore
+  @@map("BlindFormula")
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model BlindFormulaCode {
-  Code      String?
-  Color     String?
-  Type      String?
-  LayerCode String?
+  Code      String @id
+  Color     String
+  Type      String
+  LayerCode String
 
-  @@ignore
+  @@map("BlindFormulaCode")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model BlindFormulaGroup {
+  GroupName   String
+  FormulaCode String
+  FormulaKey  String
+  GroupKey    String @id @default(uuid())
+
+  @@map("BlindFormulaGroup")
 }
 
 model CFOP {
   Type         String?
   Formula      String?
   OtherFormula String?
-  ID           Int     @id @default(autoincrement())
+  ID           String  @id @default(uuid())
   Name         String?
   Code         String?
+
+  @@map("CFOP")
 }

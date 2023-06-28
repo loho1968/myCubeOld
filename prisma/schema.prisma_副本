@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model BlindFormualGroup {
+  GroupName   String?
+  FormualCode String?
+  FormualKey  String?
+  GroupKey    String?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model BlindFormula {
+  Type        String
+  Code        String
+  ThinkCode   String?
+  ColorCode   String?
+  Formula     String
+  Colored     String?
+  FormualKey  String? @id
+  SameCode    String?
+  ColorDesc   String?
+  ReverseCode String?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model BlindFormulaCode {
+  Code      String?
+  Color     String?
+  Type      String?
+  LayerCode String?
+
+  @@ignore
+}
+
+model CFOP {
+  Type         String?
+  Formula      String?
+  OtherFormula String?
+  ID           Int     @id @default(autoincrement())
+  Name         String?
+  Code         String?
+}

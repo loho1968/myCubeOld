@@ -56,6 +56,8 @@ useHead({
   title: "魔方练习",
 });
 import { Sunny, Moon, VideoPlay } from "@element-plus/icons-vue";
+import {  CFOP,BlindFormulaGroup,BlindFormulaCode,BlindFormula} from '@prisma/client';
+
 
 const darkTheme = ref(false);
 import { useDark, useToggle } from "@vueuse/core";
@@ -66,6 +68,24 @@ const toggleDark = useToggle(isDark);
 const dayjs = useDayjs();
 
 let tempFormula = ref("");
+
+let cfopList: CFOP[] = [];
+let blindFormulaGroup:BlindFormulaGroup[]=[];
+let blindFormulaCode:BlindFormulaCode[]=[];
+let blindFormula:BlindFormula[]=[];
+await useFetch('/api/formula').then(res => {
+    const  data  = res.data["_rawValue"];
+    if (data != null && data.code==200) {
+        cfopList = <CFOP[]>data.cfop;
+        blindFormulaGroup=<BlindFormulaGroup[]>data.blindFormulaGroup;
+        blindFormulaCode=<BlindFormulaCode[]>data.blindFormulaCode;
+        blindFormula=<BlindFormula[]>data.blindFormula;
+    }else{
+        if(data != null && data.code!=200) {
+            ElMessage.error(data.msg);
+        }
+    }
+});
 //#endregion
 </script>
 
