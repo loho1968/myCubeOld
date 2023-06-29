@@ -124,9 +124,13 @@
               </div>
             </div>
           </div>
-          <div class="mr-auto bg-blue-300 w-full">
+          <div class="mr-auto w-full">
             right
-            <div>
+            <div class="flex flex-col">
+              <div >
+                  <el-text class="mx-1" type="success">{{formulaTitle}}</el-text>
+              </div>
+
               <div id="simulator"></div>
             </div>
           </div>
@@ -186,6 +190,17 @@ let cfopList: CFOP[] = [];
 let blindFormulaGroup: BlindFormulaGroup[] = [];
 let blindFormulaCode: BlindFormulaCode[] = [];
 let blindFormula: BlindFormula[] = [];
+let rowblindFormula = ref<BlindFormula>({Code:"",Formula:"",ThinkCode:"",ColorDesc:""});
+let formulaTitle=ref("");
+
+function changeTitle(rowblindFormula) {
+    if(rowblindFormula.Code==undefined || rowblindFormula.Code=='')
+    {
+        formulaTitle.value= '';
+        return;
+    }
+    formulaTitle.value=rowblindFormula.Code + "-" + rowblindFormula.ThinkCode + "--" + rowblindFormula.ColorDesc;
+}
 const currentPage = ref(1);
 const pageSize = ref(28);
 //#endregion
@@ -325,19 +340,23 @@ const handleSizeChange = (e) => {
 };
 
 const CreateFormula = (id, alg, colored) => {
-    CubeAnimation.create_in_dom(
-        "#" + id,
-        `alg=${alg}|flags=showalg|algdisplay=fancy2s Z${colored}`,
-        `class='roofpig ' style='width:${w};height:${w}'`
-    );
+  CubeAnimation.create_in_dom(
+    "#" + id,
+    `alg=${alg}|flags=showalg|algdisplay=fancy2s Z${colored}`,
+    `class='roofpig ' style='width:${w};height:${w}'`
+  );
 };
+const instance = getCurrentInstance();
 const rowClick = (row, column, event) => {
-  console.log(row.Formula);
+  rowblindFormula = row;
+  console.log(formulaTitle.value)
+    changeTitle(rowblindFormula);
+  console.log(instance.ctx.$refs.rowblindFormula);
   const formulaList = row.Formula.split(" ");
   const alg = formulaList.reverse().join(" ");
   const item = document.getElementById("simulator");
   item.innerHTML = "";
-  item.textContent = row.Code + "-" + row.ThinkCode + "--" + row.ColorDesc;
+  // item.textContent = row.Code + "-" + row.ThinkCode + "--" + row.ColorDesc;
   let colored = "";
   const baseColored = "U D L R F B";
   if (row.Colored != null) {
@@ -345,7 +364,6 @@ const rowClick = (row, column, event) => {
   }
   CreateFormula("simulator", row.Formula, colored);
 };
-
 </script>
 
 <style scoped></style>

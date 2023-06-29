@@ -59,8 +59,8 @@
 .cubebox {
     height: 400px;
     width: 500px;
-    border-style: solid;
-    border-width: 1px;
+    /*border-style: solid;*/
+    /*border-width: 1px;*/
 }
 
 .cubebox2 {
@@ -74,8 +74,8 @@
 .cube {
     width: 450px;
     height: 450px;
-    border-style: solid;
-    border-width: 1px;
+    /*border-style: solid;*/
+    /*border-width: 1px;*/
 }
 
 #samecode {
