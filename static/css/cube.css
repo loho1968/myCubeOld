@@ -1,0 +1,83 @@
+﻿.changeColor {
+    background-color: #31b0d5 !important;
+    color: white;
+}
+
+.roofpig {
+    width: 160px;
+    height: 210px;
+    float: left;
+    margin: 4px;
+}
+
+.roofpig2 {
+    width: 160px;
+    height: 210px;
+    float: left;
+    margin: 4px;
+}
+
+.rp20 {
+    width: 80px;
+    height: 90px;
+}
+
+.rp160 {
+    width: 160px;
+    height: 180px;
+}
+
+.rp170 {
+    width: 170px;
+    height: 203px;
+}
+
+.rp250 {
+    width: 250px;
+    height: 299px;
+    border: 0px;
+}
+
+.rp440 {
+    width: 440px;
+    height: 499px;
+}
+
+.left {
+    float: left;
+}
+
+.changeColor {
+    background-color: #31b0d5 !important;
+    color: white;
+}
+
+.cubebox1 {
+    top: 50px;
+}
+
+.cubebox {
+    height: 400px;
+    width: 500px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.cubebox2 {
+    top: 375px;
+}
+
+.main {
+    margin-left: 10px;
+}
+
+.cube {
+    width: 450px;
+    height: 450px;
+    border-style: solid;
+    border-width: 1px;
+}
+
+#samecode {
+    margin-top: 150px
+}

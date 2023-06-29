@@ -124,7 +124,12 @@
               </div>
             </div>
           </div>
-          <div class="mr-auto bg-blue-300 w-full">right</div>
+          <div class="mr-auto bg-blue-300 w-full">
+            right
+            <div>
+              <div id="simulator"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -162,6 +167,7 @@ const toggleDark = useToggle(isDark);
 //#endregion
 
 let tempFormula = ref("");
+const w = "350px";
 const blindFormulaType = [
   {
     value: "棱块",
@@ -184,9 +190,6 @@ const currentPage = ref(1);
 const pageSize = ref(28);
 //#endregion
 
-//#region 基础：函数
-
-//#endregion
 await useFetch("/api/formula").then((res) => {
   const data = res.data["_rawValue"];
   if (data != null && data.code == 200) {
@@ -316,12 +319,33 @@ const showBlindFormulaList = computed(() => {
 const handleCurrentChange = (e) => {
   state.page = e;
 };
+
 const handleSizeChange = (e) => {
   state.limit = e;
 };
-const rowClick = (row, column, event) => {
-  console.log(row, column, event);
+
+const CreateFormula = (id, alg, colored) => {
+    CubeAnimation.create_in_dom(
+        "#" + id,
+        `alg=${alg}|flags=showalg|algdisplay=fancy2s Z${colored}`,
+        `class='roofpig ' style='width:${w};height:${w}'`
+    );
 };
+const rowClick = (row, column, event) => {
+  console.log(row.Formula);
+  const formulaList = row.Formula.split(" ");
+  const alg = formulaList.reverse().join(" ");
+  const item = document.getElementById("simulator");
+  item.innerHTML = "";
+  item.textContent = row.Code + "-" + row.ThinkCode + "--" + row.ColorDesc;
+  let colored = "";
+  const baseColored = "U D L R F B";
+  if (row.Colored != null) {
+    colored = "|colored=" + baseColored + row.Colored;
+  }
+  CreateFormula("simulator", row.Formula, colored);
+};
+
 </script>
 
 <style scoped></style>

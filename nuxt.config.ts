@@ -2,6 +2,20 @@
 // @ts-ignore
 // @ts-ignore
 export default defineNuxtConfig({
+  app: {
+    head: {
+      script: [
+        // <script src="https://myawesome-lib.js"></script>
+        { src: '/static/js/jquery.min.js' },
+        { src: '/static/js/roofpig_and_three.min.js' },
+        { src: '/static/js/three.min.js' },
+      ],
+      link: [
+        // <link rel="stylesheet" href="https://myawesome-lib.css">
+        { rel: 'stylesheet', href: '/static/css/cube.css' }
+      ],
+    },
+  },
   css: [
     '~/assets/css/tailwind.css',
   ],
