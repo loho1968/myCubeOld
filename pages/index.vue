@@ -43,7 +43,7 @@
               clearable
               placeholder="输入公式"
             />
-            <el-button :icon="VideoPlay" round size="default">show</el-button>
+            <el-button :icon="VideoPlay" round size="default" @click="showTempFormual">show</el-button>
           </div>
           <div>
             <el-switch
@@ -124,14 +124,13 @@
               </div>
             </div>
           </div>
-          <div class="mr-auto w-full">
-            right
-            <div class="flex flex-col">
-              <div >
-                  <el-text class="mx-1" type="success">{{formulaTitle}}</el-text>
+          <div class="mr-auto w-full flex flex-col justify-between">
+            <div class="">
+              <div class="text-center w-1/2">
+                <p class="text-lg">{{ formulaTitle }}</p>
               </div>
 
-              <div id="simulator"></div>
+              <div id="simulator" class="flex-1"></div>
             </div>
           </div>
         </div>
@@ -171,7 +170,8 @@ const toggleDark = useToggle(isDark);
 //#endregion
 
 let tempFormula = ref("");
-const w = "350px";
+const cubeWidth = "550px";
+const cubeHeight="50%";
 const blindFormulaType = [
   {
     value: "棱块",
@@ -190,16 +190,25 @@ let cfopList: CFOP[] = [];
 let blindFormulaGroup: BlindFormulaGroup[] = [];
 let blindFormulaCode: BlindFormulaCode[] = [];
 let blindFormula: BlindFormula[] = [];
-let rowblindFormula = ref<BlindFormula>({Code:"",Formula:"",ThinkCode:"",ColorDesc:""});
-let formulaTitle=ref("");
+let rowblindFormula = ref<BlindFormula>({
+  Code: "",
+  Formula: "",
+  ThinkCode: "",
+  ColorDesc: "",
+});
+let formulaTitle = ref("");
 
 function changeTitle(rowblindFormula) {
-    if(rowblindFormula.Code==undefined || rowblindFormula.Code=='')
-    {
-        formulaTitle.value= '';
-        return;
-    }
-    formulaTitle.value=rowblindFormula.Code + "-" + rowblindFormula.ThinkCode + "--" + rowblindFormula.ColorDesc;
+  if (rowblindFormula.Code == undefined || rowblindFormula.Code == "") {
+    formulaTitle.value = "";
+    return;
+  }
+  formulaTitle.value =
+    rowblindFormula.Code +
+    "-" +
+    rowblindFormula.ThinkCode +
+    "--" +
+    rowblindFormula.ColorDesc;
 }
 const currentPage = ref(1);
 const pageSize = ref(28);
@@ -340,17 +349,18 @@ const handleSizeChange = (e) => {
 };
 
 const CreateFormula = (id, alg, colored) => {
+  //cubeWidth
   CubeAnimation.create_in_dom(
     "#" + id,
     `alg=${alg}|flags=showalg|algdisplay=fancy2s Z${colored}`,
-    `class='roofpig ' style='width:${w};height:${w}'`
+    `class='roofpig ' style='width:${cubeHeight};height:${cubeWidth}'`
   );
 };
 const instance = getCurrentInstance();
 const rowClick = (row, column, event) => {
   rowblindFormula = row;
-  console.log(formulaTitle.value)
-    changeTitle(rowblindFormula);
+  tempFormula.value = row.Formula;
+  changeTitle(rowblindFormula);
   console.log(instance.ctx.$refs.rowblindFormula);
   const formulaList = row.Formula.split(" ");
   const alg = formulaList.reverse().join(" ");
@@ -364,6 +374,18 @@ const rowClick = (row, column, event) => {
   }
   CreateFormula("simulator", row.Formula, colored);
 };
+const showTempFormual=()=>{
+    let f=tempFormula.value
+    const reg = "/’ /g";
+    const myregex = eval(reg)
+    const reg2 = "/’/g";
+    const myregex2 = eval(reg2)
+    f = f.replace(myregex, "' ");
+    f = f.replace(myregex2, "' ");
+    const item = document.getElementById("simulator");
+    item.innerHTML = "";
+    CubeAnimation.create_in_dom('#simulator', `alg=${f}|flags=showalg|algdisplay=fancy2s Z`, `class=roofpig style='width:${cubeHeight};heigth:${cubeWidth}'`);
+}
 </script>
 
 <style scoped></style>
