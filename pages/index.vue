@@ -33,6 +33,12 @@
               />
             </div>
           </div>
+          <div>
+            <el-text type="primary"
+              >F-前面 B-后面 R-右面 L左面 U-上面 D-下面 S-中间 E-水平中间
+              M-垂直中间</el-text
+            >
+          </div>
         </div>
         <div class=""></div>
         <div class="flex justify-between items-center">
@@ -47,7 +53,7 @@
               :icon="VideoPlay"
               round
               size="default"
-              @click="showTempFormual"
+              @click="showTempFormula"
               >show</el-button
             >
           </div>
@@ -65,7 +71,7 @@
         </div>
       </div>
     </div>
-    <div class="flex-1">
+    <div class="h-[calc(100vh-60px)]">
       <div class="flex flex-col justify-between h-full">
         <div class="flex justify-between h-full">
           <div class="border-r-2 w-2/5 mr-2">
@@ -73,6 +79,7 @@
               <el-table
                 :data="showBlindFormulaList"
                 border
+                height="calc(100vh-60px)"
                 highlight-current-row
                 stripe
                 style="width: 100%"
@@ -102,6 +109,7 @@
                   width="130"
                 />
                 <el-table-column label="" width="80">
+                  <!--suppress VueUnrecognizedSlot -->
                   <template #default="scope">
                     <el-button size="small" type="primary" @click=""
                       >Edit</el-button
@@ -132,22 +140,25 @@
           </div>
           <div class="mr-auto w-full flex flex-col justify-between">
             <div class="">
-              <div class="text-center w-1/2">
-                <p class="text-lg">{{ formulaTitle }}</p>
+              <div id="" class="flex-1">
+                <div class="flex justify-between w-full items-center">
+                  <div class="border-2 h-[550px] w-1/2">
+                    <div class="text-center w-1/2 mt-2">
+                      <p class="text-2xl">{{ formulaTitle }}</p>
+                    </div>
+                    <div id="simulator" class="flex-"></div>
+                  </div>
+                  <div class="h-[550px] border-2 w-1/2">
+                    <div class="text-center w-1/2 mt-2">
+                      <p class="text-2xl">{{ reverseTitle }}</p>
+                    </div>
+                    <div id="left_right" class="flex-1"></div>
+                  </div>
+                </div>
               </div>
-
-              <div id="simulator" class="flex-1"></div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="h-[60px] border-t-2 flex items-center">
-      <div class="mx-1 ml-2">
-        <el-text type="primary"
-          >F-前面 B-后面 R-右面 L左面 U-上面 D-下面 S-中间 E-水平中间
-          M-垂直中间</el-text
-        >
       </div>
     </div>
   </div>
@@ -155,9 +166,6 @@
 
 <!--suppress TypeScriptUnresolvedReference -->
 <script lang="ts" setup>
-//B' D' D2 E  E' E2 F  F' F2 L L' L2 M' M2 R' R2 S  S' U' U2 f  f' f2 l  l' r' r2 u u' u2 x x'
-//B' D  D2 E' E  E2 F' F  F2 R R' R2 M' M2 L' L2 S' S  U  U2 f' f  f2 r  r' l' l2 u' u u2 x x'
-
 //#region 基础:import 变量声明等
 import { forEach } from "lodash-es";
 import { Moon, Sunny, VideoPlay } from "@element-plus/icons-vue";
@@ -179,8 +187,7 @@ const toggleDark = useToggle(isDark);
 //#endregion
 
 let tempFormula = ref("");
-const cubeWidth = "550px";
-const cubeHeight = "50%";
+
 const blindFormulaType = [
   {
     value: "棱块",
@@ -192,32 +199,44 @@ const blindFormulaType = [
   },
 ];
 const typeValue = ref("棱块");
-const pageRows = ref(29);
+const pageRows = ref(20);
 const searchFormulaCode = ref("");
 
 let cfopList: CFOP[] = [];
 let blindFormulaGroup: BlindFormulaGroup[] = [];
 let blindFormulaCode: BlindFormulaCode[] = [];
 let blindFormula: BlindFormula[] = [];
-let rowblindFormula = ref<BlindFormula>({
+let rowBlindFormula = ref<BlindFormula>({
   Code: "",
   Formula: "",
   ThinkCode: "",
   ColorDesc: "",
 });
 let formulaTitle = ref("");
-
-function changeTitle(rowblindFormula) {
-  if (rowblindFormula.Code == undefined || rowblindFormula.Code == "") {
+let reverseTitle = ref("");
+function changeTitle(rowBlindFormula) {
+  if (rowBlindFormula.Code == undefined || rowBlindFormula.Code == "") {
     formulaTitle.value = "";
     return;
   }
   formulaTitle.value =
-    rowblindFormula.Code +
+    rowBlindFormula.Code +
     "-" +
-    rowblindFormula.ThinkCode +
+    rowBlindFormula.ThinkCode +
     "--" +
-    rowblindFormula.ColorDesc;
+    rowBlindFormula.ColorDesc;
+}
+function changeReserveTitle(rowBlindFormula) {
+  if (rowBlindFormula.Code == undefined || rowBlindFormula.Code == "") {
+    reverseTitle.value = "";
+    return;
+  }
+  reverseTitle.value =
+    rowBlindFormula.Code +
+    "-" +
+    rowBlindFormula.ThinkCode +
+    "--" +
+    rowBlindFormula.ColorDesc;
 }
 const currentPage = ref(1);
 const pageSize = ref(28);
@@ -241,10 +260,9 @@ let allFormulaCode = "";
 
 const getAllCode = (formula, allFormulaCode) => {
   const arr = formula.split(" ");
-  for (let i=0; i < arr.length; i++) {
+  for (let i = 0; i < arr.length; i++) {
     if (allFormulaCode.indexOf(arr[i]) == -1) {
-        allFormulaCode += " " + arr[i];
-
+      allFormulaCode += " " + arr[i];
     }
   }
   return allFormulaCode;
@@ -322,7 +340,7 @@ for (let i = 0; i < blindFormula.length; i++) {
   }
   arr = arr.reverse();
 }
-console.log(allFormulaCode.split(" ").sort());
+
 blindFormula = blindFormula.sort(function (a, b) {
   let x = a.Type.toLowerCase();
   let y = b.Type.toLowerCase();
@@ -376,28 +394,42 @@ const CreateFormula = (id, alg, colored) => {
   CubeAnimation.create_in_dom(
     "#" + id,
     `alg=${alg}|flags=showalg|algdisplay=fancy2s Z${colored}`,
-    `class='roofpig ' style='width:${cubeHeight};height:${cubeWidth}'`
+    `class='roofpig ' style='width:550px'`
   );
 };
-const instance = getCurrentInstance();
-const rowClick = (row, column, event) => {
-  rowblindFormula = row;
+const rowClick = (row) => {
+  rowBlindFormula = row;
   tempFormula.value = row.Formula;
-  changeTitle(rowblindFormula);
-  console.log(instance.ctx.$refs.rowblindFormula);
-  const formulaList = row.Formula.split(" ");
-  const alg = formulaList.reverse().join(" ");
-  const item = document.getElementById("simulator");
+  changeTitle(rowBlindFormula);
+  let item = document.getElementById("simulator");
   item.innerHTML = "";
-  // item.textContent = row.Code + "-" + row.ThinkCode + "--" + row.ColorDesc;
+  item = document.getElementById("left_right");
+  item.innerHTML = "";
+  let reserve = getReverseFormula(rowBlindFormula.Formula);
+  let reserveFormula = {};
+  const tmp = blindFormula.filter((r) => r.Formula == reserve);
+
+  if (tmp.length > 0) {
+    reserveFormula = tmp[0];
+  } else {
+    reserveFormula.Formula = reserve;
+    reserveFormula.Code = "NOT FOUND";
+    reserveFormula.ThinkCode = "";
+    reserveFormula.ColorDesc = reserve;
+  }
+  changeReserveTitle(reserveFormula);
   let colored = "";
   const baseColored = "U D L R F B";
   if (row.Colored != null) {
     colored = "|colored=" + baseColored + row.Colored;
   }
   CreateFormula("simulator", row.Formula, colored);
+  if (reserveFormula.Colored != null) {
+    colored = "|colored=" + baseColored + reserveFormula.Colored;
+  }
+  CreateFormula("left_right", reserveFormula.Formula, colored);
 };
-const showTempFormual = () => {
+const showTempFormula = () => {
   let f = tempFormula.value;
   const reg = "/’ /g";
   const regex = eval(reg);
@@ -410,26 +442,73 @@ const showTempFormual = () => {
   CubeAnimation.create_in_dom(
     "#simulator",
     `alg=${f}|flags=showalg|algdisplay=fancy2s Z`,
-    `class=roofpig style='width:${cubeHeight};heigth:${cubeWidth}'`
+    `class="roofpig" style='width:50%'`
   );
 };
-const rightLeftSwitch = (formula) => {
+
+const getReverseFormula = (formula) => {
   const arr = formula.split(" ");
-  let result = "";
+  let reserveFormula = "";
+  //B' D' D2 E  E' E2 F  F' F2 L L' L2 M' M2 R' R2 S  S' U' U2 f  f' f2 l  l' r' r2 u u' u2 x x'
+  //B' D  D2 E' E  E2 F' F  F2 R R' R2 M' M2 L' L2 S' S  U  U2 f' f  f2 r  r' l' l2 u' u u2 x x'
+
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i].indexOf("2") == -1) {
-      result += arr[i] + " ";
+    if (arr[i].indexOf("2") > -1) {
+      reserveFormula += " " + arr[i];
       continue;
     }
-    if (arr[i].indexOf("L") > -1) {
-      result += arr[i].replace("R", "") + " ";
-      continue;
-    }
-    if (arr[i].indexOf("R") > -1) {
-      result += arr[i].replace("L", "") + " ";
-      continue;
+
+    switch (arr[i]) {
+      case "B'":
+      case "D'":
+      case "E'":
+      case "F'":
+      case "S'":
+      case "U'":
+      case "f'":
+      case "u'":
+        reserveFormula += " " + arr[i].replace("'", "");
+        break;
+      case "B":
+      case "D":
+      case "E":
+      case "F":
+      case "S":
+      case "U":
+      case "f":
+      case "u":
+        reserveFormula += " " + arr[i] + "'";
+        break;
+      case "L'":
+        console.log(reserveFormula);
+        reserveFormula += " R";
+        console.log(reserveFormula);
+        break;
+      case "L":
+        reserveFormula += " R'";
+        break;
+      case "R'":
+        reserveFormula += " L";
+        break;
+      case "R":
+        reserveFormula += " L'";
+        break;
+      case "l":
+        reserveFormula += " r'";
+        break;
+      case "r'":
+        reserveFormula += " l";
+        break;
+      case "r":
+        reserveFormula += " l'";
+        break;
+      default:
+        reserveFormula += " " + arr[i];
+        break;
     }
   }
+  reserveFormula = reserveFormula.substring(1);
+  return reserveFormula;
 };
 </script>
 
