@@ -9,16 +9,17 @@ datasource db {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model BlindFormula {
-  Type        String
-  Code        String
-  ThinkCode   String
-  ColorCode   String?
-  Formula     String
-  Colored     String?
-  FormulaKey  String  @id @default(uuid())
-  SameCode    String?
-  ColorDesc   String?
-  ReverseCode String?
+  Type          String
+  Code          String
+  ThinkCode     String
+  ColorCode     String?
+  Formula       String
+  Colored       String?
+  FormulaKey    String  @id @default(uuid())
+  SameCode      String?
+  ColorDesc     String?
+  ReverseCode   String?
+  MirrorFormula String?
 
   @@map("BlindFormula")
 }

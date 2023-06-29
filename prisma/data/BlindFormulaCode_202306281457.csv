@@ -1,0 +1,21 @@
+"Code","Color","Type","LayerCode"
+C D,黄 蓝,棱块,UL
+A B,黄 红,棱块,UF
+E F,黄 橙,棱块,UB
+G H,黄 绿,棱块,UR
+I J,白 红,棱块,DF
+K L,白 蓝,棱块,DL
+M N,白 橙,棱块,DB
+O P,白 绿,棱块,DR
+Q R,红 绿,棱块,FR
+S T,红 蓝,棱块,FL
+W X,橙 蓝,棱块,BL
+Y Z,橙 绿,棱块,BR
+A B C,黄 红 蓝,角块,UFL
+D E F,黄 蓝 橙,角块,ULB
+G H I,黄 橙 绿,角块,UBR
+J K L,黄 绿 红,角块,UFR
+W M N,白 蓝 红,角块,DFL
+O P Q,白 橙 蓝,角块,DLB
+R S T,白 绿 橙,角块,DBR
+X Y Z,白 红 绿,角块,DFR

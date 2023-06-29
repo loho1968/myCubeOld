@@ -1,0 +1,12 @@
+"Type","Formula","OtherFormula","ID","Name","Code"
+F,R U R',,2,基本-1G,FB1
+F,y' R' U' R,F' U' F,3,基本-2,FB2
+F,y’ U’ R’ U R,F R’ F’ R,4,基本-3,FB3
+F,U R U’ R’,R’ F R F’,5,基本-4,FB4
+T,R L' U D' F B' R' L U2 D2,,7,六面回字,色心
+T,R2 L2 F2 B2 U2 D2,,8,彩色十字 ,彩色十字 
+T,f F r R u U f F r R u U,,9,龙,龙
+T,f F r R u U f F r R u U L2 R2,,10,十二曲桥,十二曲桥
+T,B L' D2 L D F' D2 F D' B' F' R U2 R' U' B U2 B' U F,,11,巨介子,巨介子
+T,B R L' D' R2 D R' L B' R2 U B2 U' D B2 R L U2 R' L' B2 D',,12,双环,双环
+T,L' R2 F' L' B' U B L F R U' R L R L' F B' U D' R L',,13,"6面U字","6面U字"
