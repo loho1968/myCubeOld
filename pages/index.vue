@@ -43,7 +43,13 @@
               clearable
               placeholder="输入公式"
             />
-            <el-button :icon="VideoPlay" round size="default" @click="showTempFormual">show</el-button>
+            <el-button
+              :icon="VideoPlay"
+              round
+              size="default"
+              @click="showTempFormual"
+              >show</el-button
+            >
           </div>
           <div>
             <el-switch
@@ -149,6 +155,9 @@
 
 <!--suppress TypeScriptUnresolvedReference -->
 <script lang="ts" setup>
+//B' D' D2 E  E' E2 F  F' F2 L L' L2 M' M2 R' R2 S  S' U' U2 f  f' f2 l  l' r' r2 u u' u2 x
+//B' D  D2 E' E  E2 F' F  F2 R R' R2 M' M2 L' L2 S' S  U  U2 f' f  f2 r  r' l' l2 u' u u2 x
+
 //#region 基础:import 变量声明等
 import { forEach } from "lodash-es";
 import { Moon, Sunny, VideoPlay } from "@element-plus/icons-vue";
@@ -171,7 +180,7 @@ const toggleDark = useToggle(isDark);
 
 let tempFormula = ref("");
 const cubeWidth = "550px";
-const cubeHeight="50%";
+const cubeHeight = "50%";
 const blindFormulaType = [
   {
     value: "棱块",
@@ -228,12 +237,25 @@ await useFetch("/api/formula").then((res) => {
   }
 });
 
+let allFormulaCode = "";
+
+const getAllCode = (formula, allFormulaCode) => {
+  const arr = formula.split(" ");
+  for (let i=0; i < arr.length; i++) {
+    if (allFormulaCode.indexOf(arr[i]) == -1) {
+        allFormulaCode += " " + arr[i];
+
+    }
+  }
+  return allFormulaCode;
+};
 //#region 基础：计算盲拧公式颜色等
 let colorArr = [];
 for (let i = 0; i < blindFormula.length; i++) {
   let arr = blindFormula[i].Code.split("");
   blindFormula[i].Colored = "";
   blindFormula[i].ColorDesc = "";
+  allFormulaCode = getAllCode(blindFormula[i].Formula, allFormulaCode);
   forEach(arr, (c) => {
     let formulaCode = blindFormulaCode.find(
       (r) => r.Code.indexOf(c) > -1 && r.Type == blindFormula[i].Type
@@ -300,6 +322,7 @@ for (let i = 0; i < blindFormula.length; i++) {
   }
   arr = arr.reverse();
 }
+console.log(allFormulaCode);
 blindFormula = blindFormula.sort(function (a, b) {
   let x = a.Type.toLowerCase();
   let y = b.Type.toLowerCase();
@@ -374,18 +397,40 @@ const rowClick = (row, column, event) => {
   }
   CreateFormula("simulator", row.Formula, colored);
 };
-const showTempFormual=()=>{
-    let f=tempFormula.value
-    const reg = "/’ /g";
-    const myregex = eval(reg)
-    const reg2 = "/’/g";
-    const myregex2 = eval(reg2)
-    f = f.replace(myregex, "' ");
-    f = f.replace(myregex2, "' ");
-    const item = document.getElementById("simulator");
-    item.innerHTML = "";
-    CubeAnimation.create_in_dom('#simulator', `alg=${f}|flags=showalg|algdisplay=fancy2s Z`, `class=roofpig style='width:${cubeHeight};heigth:${cubeWidth}'`);
-}
+const showTempFormual = () => {
+  let f = tempFormula.value;
+  const reg = "/’ /g";
+  const regex = eval(reg);
+  const reg2 = "/’/g";
+  const regex2 = eval(reg2);
+  f = f.replace(regex, "' ");
+  f = f.replace(regex2, "' ");
+  const item = document.getElementById("simulator");
+  item.innerHTML = "";
+  CubeAnimation.create_in_dom(
+    "#simulator",
+    `alg=${f}|flags=showalg|algdisplay=fancy2s Z`,
+    `class=roofpig style='width:${cubeHeight};heigth:${cubeWidth}'`
+  );
+};
+const rightLeftSwitch = (formula) => {
+  const arr = formula.split(" ");
+  let result = "";
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i].indexOf("2") == -1) {
+      result += arr[i] + " ";
+      continue;
+    }
+    if (arr[i].indexOf("L") > -1) {
+      result += arr[i].replace("R", "") + " ";
+      continue;
+    }
+    if (arr[i].indexOf("R") > -1) {
+      result += arr[i].replace("L", "") + " ";
+      continue;
+    }
+  }
+};
 </script>
 
 <style scoped></style>
