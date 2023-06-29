@@ -155,8 +155,8 @@
 
 <!--suppress TypeScriptUnresolvedReference -->
 <script lang="ts" setup>
-//B' D' D2 E  E' E2 F  F' F2 L L' L2 M' M2 R' R2 S  S' U' U2 f  f' f2 l  l' r' r2 u u' u2 x
-//B' D  D2 E' E  E2 F' F  F2 R R' R2 M' M2 L' L2 S' S  U  U2 f' f  f2 r  r' l' l2 u' u u2 x
+//B' D' D2 E  E' E2 F  F' F2 L L' L2 M' M2 R' R2 S  S' U' U2 f  f' f2 l  l' r' r2 u u' u2 x x'
+//B' D  D2 E' E  E2 F' F  F2 R R' R2 M' M2 L' L2 S' S  U  U2 f' f  f2 r  r' l' l2 u' u u2 x x'
 
 //#region 基础:import 变量声明等
 import { forEach } from "lodash-es";
@@ -322,7 +322,7 @@ for (let i = 0; i < blindFormula.length; i++) {
   }
   arr = arr.reverse();
 }
-console.log(allFormulaCode);
+console.log(allFormulaCode.split(" ").sort());
 blindFormula = blindFormula.sort(function (a, b) {
   let x = a.Type.toLowerCase();
   let y = b.Type.toLowerCase();
