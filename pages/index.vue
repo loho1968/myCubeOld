@@ -177,47 +177,44 @@
     </div>
   </div>
 
-  <el-dialog v-model="dialogFormVisible" title="公式编辑"  destroy-on-close>
-    <el-form :model="rowBlindFormula" label-position="top">
-      <el-row>
-        <el-form-item label="类型">
-          <el-select v-model="rowBlindFormula.Type" placeholder="必须设置类型">
-            <el-option label="棱块" value="棱块" />
-            <el-option label="角块" value="角块" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="编码">
-          <el-input v-model="rowBlindFormula.Code" autocomplete="off" />
-        </el-form-item>
-        <el-form-item label="助记码">
-          <el-input v-model="rowBlindFormula.ThinkCode" autocomplete="off" />
-        </el-form-item>
-      </el-row>
-      <el-row>
-        <el-form-item label="公式">
-          <el-input v-model="rowBlindFormula.Formula" autocomplete="off" />
-        </el-form-item>
-        <el-form-item label="主键">
-          <el-input v-model="rowBlindFormula.FormulaKey" autocomplete="off" />
-        </el-form-item>
-      </el-row>
-      <el-row>
-        <el-form-item label="镜像公式编码">
-          <!--suppress TypeScriptUnresolvedReference -->
-          <el-input v-model="rowBlindFormula.MirrorCode" autocomplete="off" />
-        </el-form-item>
-        <el-form-item label="镜像公式">
-          <el-input
-            v-model="rowBlindFormula.MirrorFormula"
-            autocomplete="off"
-          />
-        </el-form-item>
-      </el-row>
+  <el-dialog v-model="dialogFormVisible" title="公式编辑" destroy-on-close>
+    <el-form
+      :model="rowBlindFormula"
+      label-position="top"
+      size="large"
+      status-icon
+      :rules="rules"
+      ref="ruleFormRef"
+    >
+      <el-form-item label="类型" prop="Type">
+        <el-select v-model="rowBlindFormula.Type" placeholder="必须设置类型">
+          <el-option label="棱块" value="棱块" />
+          <el-option label="角块" value="角块" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="编码" prop="Code">
+        <el-input v-model="rowBlindFormula.Code" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="助记码" prop="ThinkCode">
+        <el-input v-model="rowBlindFormula.ThinkCode" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="公式" prop="Formula">
+        <el-input v-model="rowBlindFormula.Formula" autocomplete="off" />
+      </el-form-item>
+
+      <el-form-item label="镜像公式编码">
+        <el-input v-model="rowBlindFormula.MirrorCode" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="镜像公式" size="large">
+        <el-input v-model="rowBlindFormula.MirrorFormula" autocomplete="off" />
+      </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">关闭</el-button>
-        <el-button type="primary" @click="saveFormula"> 保存 </el-button>
+        <el-button @click="resetForm(ruleFormRef)">关闭</el-button>
+        <el-button type="primary" @click="saveFormula(ruleFormRef)">
+          保存
+        </el-button>
       </span>
     </template>
   </el-dialog>
@@ -233,6 +230,7 @@ import type BlindFormulaGroup from "@prisma/client";
 import type BlindFormulaCode from "@prisma/client";
 import type BlindFormula from "@prisma/client";
 import { useDark, useToggle } from "@vueuse/core";
+import type { FormInstance, FormRules } from "element-plus";
 
 useHead({
   title: "魔方练习",
@@ -632,7 +630,14 @@ const colorFormatter = (colorDesc) => {
   result += "</div>";
   return result;
 };
-async function saveFormula() {
+async function saveFormula(formEl) {
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (!valid) {
+      console.log("error submit!");
+      return false;
+    }
+  });
   dialogFormVisible.value = false;
   const data = {};
 
@@ -653,6 +658,33 @@ async function saveFormula() {
   });
   console.log(result);
 }
+
+const ruleFormRef = ref<FormInstance>();
+const validateCode = (rule: any, value: any, callback: any) => {
+  if (value === "") {
+    callback(new Error("必须输入编码"));
+  }
+};
+const validateThinkCode = (rule: any, value: any, callback: any) => {
+  if (value === "") {
+    callback(new Error("必须输入助记码"));
+  }
+};
+const validateFormula = (rule: any, value: any, callback: any) => {
+  if (value === "") {
+    callback(new Error("必须输入公式"));
+  }
+};
+
+const rules = reactive<FormRules<typeof rowBlindFormula>>({
+  Code: [{ validator: validateCode, trigger: "blur" }],
+  ThinkCode: [{ validator: validateThinkCode, trigger: "blur" }],
+  Formula: [{ validator: validateFormula, trigger: "blur" }],
+});
+const resetForm = (formEl: FormInstance | undefined) => {
+  dialogFormVisible.value = false;
+  formEl.resetFields();
+};
 </script>
 
 <style scoped></style>
