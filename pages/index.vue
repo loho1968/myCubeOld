@@ -1,3 +1,4 @@
+<!--suppress TypeScriptValidateTypes -->
 <template>
   <div class="flex justify-between flex-col h-[100vh]">
     <div class="h-[60px]">
@@ -13,6 +14,7 @@
               placeholder="Select"
               size="small"
             >
+              <!--suppress TypeScriptValidateTypes -->
               <el-option
                 v-for="item in blindFormulaType"
                 :key="item.value"
@@ -41,7 +43,7 @@
           </div>
         </div>
         <div class=""></div>
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center ">
           <div class="flex justify-between items-center">
             <el-input
               v-model="tempFormula"
@@ -74,9 +76,10 @@
     <div class="h-[calc(100vh-60px)]">
       <div class="flex flex-col justify-between h-full">
         <div class="flex justify-between h-full">
-          <div class="border-r-2 w-2/5 mr-2">
+          <div class="border-r-2 w-2/5 mr-2 min-w-[550px]">
             <div>
               <el-table
+                ref="formulaTable"
                 :data="showBlindFormulaList"
                 border
                 height="calc(100vh-60px)"
@@ -89,6 +92,7 @@
                   header-align="center"
                   label="公式"
                   prop="Formula"
+                  min-width="210"
                 />
                 <el-table-column
                   header-align="center"
@@ -100,19 +104,26 @@
                   header-align="center"
                   label="助记码"
                   prop="ThinkCode"
-                  width="100"
+                  width="70"
                 />
                 <el-table-column
                   header-align="center"
                   label="颜色"
                   prop="ColorDesc"
-                  width="130"
-                />
+                  width="125"
+                >
+                  <template #default="scope">
+                    <div v-html="colorFormatter(scope.row.ColorDesc)"></div>
+                  </template>
+                </el-table-column>
                 <el-table-column label="" width="80">
                   <!--suppress VueUnrecognizedSlot -->
                   <template #default="scope">
-                    <el-button size="small" type="primary" @click=""
-                      >Edit</el-button
+                    <el-button
+                      size="small"
+                      type="primary"
+                      @click="editFormula(scope.row)"
+                      >修改</el-button
                     >
                   </template>
                 </el-table-column>
@@ -162,6 +173,52 @@
       </div>
     </div>
   </div>
+
+  <el-dialog v-model="dialogFormVisible" title="Shipping address">
+    <el-form :model="rowBlindFormula">
+      <el-row>
+        <el-form-item label="类型">
+          <el-select v-model="rowBlindFormula.Type" placeholder="必须设置类型">
+            <el-option label="棱块" value="棱块" />
+            <el-option label="角块" value="角块" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="编码">
+          <el-input v-model="rowBlindFormula.Code" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="助记码">
+          <el-input v-model="rowBlindFormula.ThinkCode" autocomplete="off" />
+        </el-form-item>
+      </el-row>
+      <el-row>
+        <el-form-item label="公式">
+          <el-input v-model="rowBlindFormula.Formula" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="主键">
+          <el-input v-model="rowBlindFormula.FormulaKey" autocomplete="off" />
+        </el-form-item>
+      </el-row>
+      <el-row>
+        <el-form-item label="镜像公式编码">
+          <el-input v-model="rowBlindFormula.MirrorCode" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="镜像公式">
+          <el-input
+            v-model="rowBlindFormula.MirrorFormula"
+            autocomplete="off"
+          />
+        </el-form-item>
+      </el-row>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">
+          Confirm
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <!--suppress TypeScriptUnresolvedReference -->
@@ -188,6 +245,8 @@ const toggleDark = useToggle(isDark);
 
 let tempFormula = ref("");
 
+
+
 const blindFormulaType = [
   {
     value: "棱块",
@@ -201,16 +260,24 @@ const blindFormulaType = [
 const typeValue = ref("棱块");
 const pageRows = ref(20);
 const searchFormulaCode = ref("");
+let dialogFormVisible = ref(false);
 
 let cfopList: CFOP[] = [];
 let blindFormulaGroup: BlindFormulaGroup[] = [];
 let blindFormulaCode: BlindFormulaCode[] = [];
 let blindFormula: BlindFormula[] = [];
 let rowBlindFormula = ref<BlindFormula>({
+  Type: "",
   Code: "",
-  Formula: "",
   ThinkCode: "",
+  ColorCode: "",
+  Formula: "",
+  Colored: "",
+  FormulaKey: "",
+  SameCode: "",
   ColorDesc: "",
+  ReverseCode: "",
+  MirrorFormula: "",
 });
 let formulaTitle = ref("");
 let reverseTitle = ref("");
@@ -338,6 +405,7 @@ for (let i = 0; i < blindFormula.length; i++) {
   ) {
     blindFormula[i].ColorDesc = blindFormula[i].ColorDesc.substring(2);
   }
+  //colorList
   arr = arr.reverse();
 }
 
@@ -426,6 +494,8 @@ const rowClick = (row) => {
   CreateFormula("simulator", row.Formula, colored);
   if (reserveFormula.Colored != null) {
     colored = "|colored=" + baseColored + reserveFormula.Colored;
+  } else {
+    colored = baseColored;
   }
   CreateFormula("left_right", reserveFormula.Formula, colored);
 };
@@ -439,11 +509,10 @@ const showTempFormula = () => {
   f = f.replace(regex2, "' ");
   const item = document.getElementById("simulator");
   item.innerHTML = "";
-  CubeAnimation.create_in_dom(
-    "#simulator",
-    `alg=${f}|flags=showalg|algdisplay=fancy2s Z`,
-    `class="roofpig" style='width:50%'`
-  );
+  let colored = "";
+  const baseColored = "U D L R F B";
+
+  CreateFormula("simulator", f, baseColored);
 };
 
 const getReverseFormula = (formula) => {
@@ -453,12 +522,24 @@ const getReverseFormula = (formula) => {
   //B' D  D2 E' E  E2 F' F  F2 R R' R2 M' M2 L' L2 S' S  U  U2 f' f  f2 r  r' l' l2 u' u u2 x x'
 
   for (let i = 0; i < arr.length; i++) {
-    if (arr[i].indexOf("2") > -1) {
+    if (arr[i].indexOf("2") > -1 && "L2,R2,l2,r2".indexOf(arr[i]) == -1) {
       reserveFormula += " " + arr[i];
       continue;
     }
 
     switch (arr[i]) {
+      case "L2":
+        reserveFormula += " R2";
+        break;
+      case "l2":
+        reserveFormula += " r2";
+        break;
+      case "R2":
+        reserveFormula += " L2";
+        break;
+      case "r2":
+        reserveFormula += " l2";
+        break;
       case "B'":
       case "D'":
       case "E'":
@@ -480,9 +561,7 @@ const getReverseFormula = (formula) => {
         reserveFormula += " " + arr[i] + "'";
         break;
       case "L'":
-        console.log(reserveFormula);
         reserveFormula += " R";
-        console.log(reserveFormula);
         break;
       case "L":
         reserveFormula += " R'";
@@ -495,6 +574,9 @@ const getReverseFormula = (formula) => {
         break;
       case "l":
         reserveFormula += " r'";
+        break;
+      case "l'":
+        reserveFormula += " r";
         break;
       case "r'":
         reserveFormula += " l";
@@ -509,6 +591,46 @@ const getReverseFormula = (formula) => {
   }
   reserveFormula = reserveFormula.substring(1);
   return reserveFormula;
+};
+
+const vueInstance = getCurrentInstance();
+const formulaTable = ref(null);
+const editFormula = (row) => {
+  rowBlindFormula.value = row;
+  vueInstance.refs.formulaTable.setCurrentRow(row);
+  dialogFormVisible.value = true;
+};
+
+const colorList = {
+    红: "black",
+    绿: "black",
+    黄: "black",
+    蓝: "white",
+    橙: "white",
+    白: "black",
+};
+const colorBackGroundList = {
+    红: "#FB0019",
+    绿: "#26D82E",
+    黄: "#FFFF3C",
+    蓝: "#106CF8",
+    橙: "#FD9B2A",
+    白: "#EBEBEB",
+};
+const colorFormatter = (colorDesc) => {
+  const arr = colorDesc.split("--");
+  const color1 = arr[0].split("");
+  const color2 = arr[1].split("");
+  let result = "<div class='flex justify-between'>";
+  for (let i = 0; i < color1.length; i++) {
+    result += `<p style="background-color:${colorBackGroundList[color1[i]]};color:${colorList[color1[i]]};display:block;font-size:20px">` + color1[i] + `</p>`;
+  }
+  result += "<p>--</p>";
+  for (let j = 0; j< color2.length; j++) {
+      result += `<p style="background-color:${colorBackGroundList[color2[j]]};color:${colorList[color2[j]]} ;font-size:20px">` + color2[j] + `</p>`;
+  }
+  result+="</div>";
+  return result;
 };
 </script>
 
