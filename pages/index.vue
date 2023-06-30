@@ -462,7 +462,7 @@ const rowClick = (row) => {
   item.innerHTML = "";
   let reserve = getReverseFormula(rowBlindFormula.Formula);
   let reserveFormula = {};
-  const tmp = blindFormula.filter((r) => r.Formula == reserve);
+  const tmp = blindFormula.filter((r) => r.Formula == reserve && r.Type == row.Type);
 
   if (tmp.length > 0) {
     reserveFormula = tmp[0];
