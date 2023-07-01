@@ -91,29 +91,29 @@
                 <el-table-column
                   header-align="center"
                   label="公式"
-                  prop="Formula"
                   min-width="210"
+                  prop="Formula"
                 />
                 <el-table-column
+                  align="center"
                   header-align="center"
                   label="编码"
                   prop="Code"
                   width="53"
-                  align="center"
                 />
                 <el-table-column
+                  align="center"
                   header-align="center"
                   label="助记码"
                   prop="ThinkCode"
                   width="67"
-                  align="center"
                 />
                 <el-table-column
+                  align="center"
                   header-align="center"
                   label="颜色"
                   prop="ColorDesc"
                   width="125"
-                  align="center"
                 >
                   <template #default="scope">
                     <div v-html="colorFormatter(scope.row.ColorDesc)"></div>
@@ -157,14 +157,15 @@
               <div id="" class="flex-1">
                 <div class="flex justify-between w-full items-center">
                   <div class="border-2 h-[550px] w-1/2">
-                    <div class="text-center w-1/2 mt-2">
-                      <p class="text-2xl">{{ formulaTitle }}</p>
-                    </div>
+                    <div
+                      class="text-center w-1/2 mt-2 items-center"
+                      v-html="formulaTitle"
+                    ></div>
                     <div id="simulator" class="flex-"></div>
                   </div>
                   <div class="h-[550px] border-2 w-1/2">
                     <div class="text-center w-1/2 mt-2">
-                      <p class="text-2xl">{{ reverseTitle }}</p>
+                      <p class="text-2xl" v-html="reverseTitle"></p>
                     </div>
                     <div id="left_right" class="flex-1"></div>
                   </div>
@@ -177,14 +178,14 @@
     </div>
   </div>
 
-  <el-dialog v-model="dialogFormVisible" title="公式编辑" destroy-on-close>
+  <el-dialog v-model="dialogFormVisible" destroy-on-close title="公式编辑">
     <el-form
+      ref="ruleFormRef"
       :model="rowBlindFormula"
+      :rules="rules"
       label-position="top"
       size="large"
       status-icon
-      :rules="rules"
-      ref="ruleFormRef"
     >
       <el-form-item label="类型" prop="Type">
         <el-select v-model="rowBlindFormula.Type" placeholder="必须设置类型">
@@ -281,16 +282,18 @@ function changeTitle(formula) {
     formulaTitle.value = "";
     return;
   }
-  formulaTitle.value =
-    formula.Code + "-" + formula.ThinkCode + "--" + formula.ColorDesc;
+  formulaTitle.value = `<div  class="flex justify-center text-2xl">${
+    formula.Code
+  }-${formula.ThinkCode}--${colorFormatter(formula.ColorDesc)}</div>`;
 }
 function changeReserveTitle(formula) {
   if (formula.Code == undefined || formula.Code == "") {
     reverseTitle.value = "";
     return;
   }
-  reverseTitle.value =
-    formula.Code + "-" + formula.ThinkCode + "--" + formula.ColorDesc;
+  const colorDesc =
+    formula.Code != "" ? formula.ColorDesc.split(",") : formula.ColorDesc;
+  reverseTitle.value = `<div  class="flex justify-center text-2xl">${formula.Code}-${formula.ThinkCode}--${colorDesc}</div>`;
 }
 const currentPage = ref(1);
 const pageSize = ref(28);
@@ -462,7 +465,9 @@ const rowClick = (row) => {
   item.innerHTML = "";
   let reserve = getReverseFormula(rowBlindFormula.Formula);
   let reserveFormula = {};
-  const tmp = blindFormula.filter((r) => r.Formula == reserve && r.Type == row.Type);
+  const tmp = blindFormula.filter(
+    (r) => r.Formula == reserve && r.Type == row.Type
+  );
 
   if (tmp.length > 0) {
     reserveFormula = tmp[0];
@@ -630,6 +635,7 @@ const colorFormatter = (colorDesc) => {
   result += "</div>";
   return result;
 };
+
 async function saveFormula(formEl) {
   if (!formEl) return;
   formEl.validate((valid) => {
