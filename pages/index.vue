@@ -293,7 +293,9 @@ function changeReserveTitle(formula) {
   }
   const colorDesc =
     formula.Code != "" ? formula.ColorDesc.split(",") : formula.ColorDesc;
-  reverseTitle.value = `<div  class="flex justify-center text-2xl">${formula.Code}-${formula.ThinkCode}--${colorDesc}</div>`;
+  reverseTitle.value = `<div  class="flex justify-center text-2xl">${
+    formula.Code
+  }-${formula.ThinkCode}--${colorFormatter(formula.ColorDesc)}</div>`;
 }
 const currentPage = ref(1);
 const pageSize = ref(28);
