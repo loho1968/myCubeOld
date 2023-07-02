@@ -451,9 +451,10 @@ const handleSizeChange = (e) => {
 
 const CreateFormula = (id, alg, colored) => {
   //cubeWidth
+  // colored = "F*";
   CubeAnimation.create_in_dom(
     "#" + id,
-    `alg=${alg}|flags=showalg|algdisplay=fancy2s Z${colored}`,
+    `alg=${alg}|flags=showalg|algdisplay=fancy2s ${colored}`,
     `class='roofpig ' style='width:550px'`
   );
 };
