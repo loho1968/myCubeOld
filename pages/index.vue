@@ -476,7 +476,7 @@ const rowClick = (row) => {
     reserveFormula = tmp[0];
   } else {
     reserveFormula.Formula = reserve;
-    reserveFormula.Code = "NOT FOUND";
+    reserveFormula.Code = " ";
     reserveFormula.ThinkCode = "";
     reserveFormula.ColorDesc = reserve;
   }
@@ -615,9 +615,16 @@ const colorBackGroundList = {
 };
 const colorFormatter = (colorDesc) => {
   const arr = colorDesc.split("--");
-  const color1 = arr[0].split("");
-  const color2 = arr[1].split("");
+  let color1 = colorDesc;
+  let color2 = "";
   let result = "<div class='flex justify-between'>";
+  if (arr.length > 1) {
+    color1 = arr[0].split("");
+    color2 = arr[1].split("");
+  } else {
+    return (result += `<p>${colorDesc}</p></div>`);
+  }
+
   for (let i = 0; i < color1.length; i++) {
     result +=
       `<p style="background-color:${colorBackGroundList[color1[i]]};color:${
