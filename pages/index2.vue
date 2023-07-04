@@ -236,53 +236,55 @@ import type { FormInstance, FormRules } from "element-plus";
 useHead({
   title: "魔方练习2",
   link: [{ rel: "stylesheet", href: "/static/lib/cuber/css/cuber.css" }],
-  script: [{src: "/static/lib/cuber/js/vendor/tween.min.js" },
-      {src:"/static/lib/cuber/js/vendor/threejs/src/Three.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/core/EventDispatcher.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/math/Math.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/math/Quaternion.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/math/Vector2.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/math/Vector3.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/math/Box3.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/math/Sphere.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/math/Euler.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/math/Matrix3.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/math/Matrix4.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/core/Object3D.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/cameras/Camera.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/cameras/PerspectiveCamera.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/math/Ray.js"},
-      {src:"/static/lib/cuber/js/vendor/threejs/src/math/Plane.js"},
-      {src:"/static/lib/cuber/js/ERNO.js"},
-      {src:"/static/lib/cuber/js/vendor/CSS3DRenderer.js"},
-      {src:"/static/lib/cuber/js/utils/utils.js"},
-      {src:"/static/lib/cuber/js/utils/Number.js"},
-      {src:"/static/lib/cuber/js/utils/String.js"},
-      {src:"/static/lib/cuber/js/utils/Array.js"},
-      {src:"/static/lib/cuber/js/colors.js"},
-      {src:"/static/lib/cuber/js/directions.js"},
-      {src:"/static/lib/cuber/js/queues.js"},
-      {src:"/static/lib/cuber/js/twists.js"},
-      {src:"/static/lib/cuber/js/cubelets.js"},
-      {src:"/static/lib/cuber/js/groups.js"},
-      {src:"/static/lib/cuber/js/slices.js"},
-      {src:"/static/lib/cuber/js/folds.js"},
-      {src:"/static/lib/cuber/js/projector.js"},
-      {src:"/static/lib/cuber/js/interaction.js"},
-      {src:"/static/lib/cuber/js/controls.js"},
-      {src:"/static/lib/cuber/js/cubes.js"},
-      {src:"/static/lib/cuber/js/solvers.js"},
-      {src:"/static/lib/cuber/js/renderer.js"},
-      {src:"/static/lib/cuber/js/extras/renderers/iecss3d.js"},
-      {src:"/static/lib/cuber/js/extras/renderers/ierenderer.js"},
-      {src:"/static/lib/cuber/js/extras/controls/locked.js"},
-      {src:"/static/lib/cuber/js/extras/deviceMotion.js"},
-      {src:"/static/lib/cubejs/cube.js"},
-      {src:"/static/lib/cube/js/initial.js"},
-      {src:"/static/lib/cube/js/util.js"},
-      {src:"/static/lib/cube/js/lbl.js"},
-      {src:"/static/lib/cube/js/two-phase.js"},
-
+  script: [
+    { src: "/static/lib/cuber/js/vendor/tween.min.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/Three.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/core/EventDispatcher.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/math/Math.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/math/Quaternion.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/math/Vector2.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/math/Vector3.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/math/Box3.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/math/Sphere.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/math/Euler.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/math/Matrix3.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/math/Matrix4.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/core/Object3D.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/cameras/Camera.js" },
+    {
+      src: "/static/lib/cuber/js/vendor/threejs/src/cameras/PerspectiveCamera.js",
+    },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/math/Ray.js" },
+    { src: "/static/lib/cuber/js/vendor/threejs/src/math/Plane.js" },
+    { src: "/static/lib/cuber/js/ERNO.js" },
+    { src: "/static/lib/cuber/js/vendor/CSS3DRenderer.js" },
+    { src: "/static/lib/cuber/js/utils/utils.js" },
+    { src: "/static/lib/cuber/js/utils/Number.js" },
+    { src: "/static/lib/cuber/js/utils/String.js" },
+    { src: "/static/lib/cuber/js/utils/Array.js" },
+    { src: "/static/lib/cuber/js/colors.js" },
+    { src: "/static/lib/cuber/js/directions.js" },
+    { src: "/static/lib/cuber/js/queues.js" },
+    { src: "/static/lib/cuber/js/twists.js" },
+    { src: "/static/lib/cuber/js/cubelets.js" },
+    { src: "/static/lib/cuber/js/groups.js" },
+    { src: "/static/lib/cuber/js/slices.js" },
+    { src: "/static/lib/cuber/js/folds.js" },
+    { src: "/static/lib/cuber/js/projector.js" },
+    { src: "/static/lib/cuber/js/interaction.js" },
+    { src: "/static/lib/cuber/js/controls.js" },
+    { src: "/static/lib/cuber/js/cubes.js" },
+    { src: "/static/lib/cuber/js/solvers.js" },
+    { src: "/static/lib/cuber/js/renderer.js" },
+    { src: "/static/lib/cuber/js/extras/renderers/iecss3d.js" },
+    { src: "/static/lib/cuber/js/extras/renderers/ierenderer.js" },
+    { src: "/static/lib/cuber/js/extras/controls/locked.js" },
+    { src: "/static/lib/cuber/js/extras/deviceMotion.js" },
+    { src: "/static/lib/cubejs/cube.js" },
+    { src: "/static/lib/cube/js/initial.js" },
+    { src: "/static/lib/cube/js/util.js" },
+    { src: "/static/lib/cube/js/lbl.js" },
+    { src: "/static/lib/cube/js/two-phase.js" },
   ],
 });
 
@@ -566,6 +568,43 @@ const getReverseFormula = (formula) => {
   //B' D' D2 E  E' E2 F  F' F2 L L' L2 M' M2 R' R2 S  S' U' U2 f  f' f2 l  l' r' r2 u u' u2 x x'
   //B' D  D2 E' E  E2 F' F  F2 R R' R2 M' M2 L' L2 S' S  U  U2 f' f  f2 r  r' l' l2 u' u u2 x x'
 
+  //l  l' r' r2 u u' u2 x x'
+  const unDoFormulas = {};
+  const twistFormula = {};
+
+  Object.assign(unDoFormulas, { "B'": "B", B: "b", B2: "BB" });
+  Object.assign(twistFormula, { "B'": "b", B: "B", B2: "BB" });
+
+  Object.assign(unDoFormulas, { "D'": "D", D: "d", D2: "DD" });
+  Object.assign(twistFormula, { "D'": "d", D: "D", D2: "DD" });
+
+  Object.assign(unDoFormulas, { "E'": "E", E: "e", D2: "DD" });
+  Object.assign(twistFormula, { "E'": "e", E: "E", D2: "DD" });
+
+  Object.assign(unDoFormulas, { "F'": "F", F: "f", F2: "FF" });
+  Object.assign(twistFormula, { "F'": "f", F: "F", F2: "FF" });
+
+  Object.assign(unDoFormulas, { "L'": "L", L: "l", L2: "LL" });
+  Object.assign(twistFormula, { "L'": "l", L: "L", L2: "LL" });
+
+  Object.assign(unDoFormulas, { "M'": "M", M: "m", M2: "MM" });
+  Object.assign(twistFormula, { "M'": "m", M: "M", M2: "MM" });
+
+  Object.assign(unDoFormulas, { "M'": "M", M: "m", M2: "MM" });
+  Object.assign(twistFormula, { "M'": "m", M: "M", M2: "MM" });
+
+  Object.assign(unDoForrulas, { "R'": "R", R: "r", R2: "RR" });
+  Object.assign(twistForrula, { "R'": "r", R: "R", R2: "RR" });
+
+  Object.assign(unDoForsulas, { "S'": "S", S: "s", S2: "SS" });
+  Object.assign(twistForsula, { "S'": "s", S: "S", S2: "SS" });
+
+  Object.assign(unDoForuulas, { "U'": "U", U: "u", U2: "UU" });
+  Object.assign(twistForuula, { "U'": "u", U: "U", U2: "UU" });
+
+  Object.assign(fnDoForfflas, { "F'": "F", F: "f", F2: "FF" });
+  Object.assign(twistForffla, { "F'": "f", F: "F", F2: "FF" });
+
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].indexOf("2") > -1 && "L2,R2,l2,r2".indexOf(arr[i]) == -1) {
       reserveFormula += " " + arr[i];
@@ -756,35 +795,33 @@ const resetForm = (formEl: FormInstance | undefined) => {
 cubeTwoPhase = new Cube();
 Cube.initSolver();
 
-
-let controls = ERNO.Locked ;
+let controls = ERNO.Locked;
 //controls=ERNO.Freeform;
 
 window.cubeGL = new ERNO.Cube({
-    hideInvisibleFaces: true,
-    controls: controls,
-    renderer: isIe ? ERNO.renderers.IeCSS3D : null,
-    showCode:true,//学习点:是否显示Code,
-    showType:"edge",//学习点:显示层
+  hideInvisibleFaces: true,
+  controls: controls,
+  renderer: isIe ? ERNO.renderers.IeCSS3D : null,
+  showCode: true, //学习点:是否显示Code,
+  showType: "edge", //学习点:显示层
 });
-cubeGL.twistDuration = 300;//旋转速度
-const showNewFormula=(formula)=>{
-    const container = document.getElementById( 'container' );
-    container.childNodes.forEach((item)=>{
-        container.removeChild(item);
-    })
-    container.appendChild( cubeGL.domElement );
-    if (controls === ERNO.Locked) {
-        const fixedOrientation = new THREE.Euler(Math.PI * 0.1, Math.PI * -0.25, 0);
-        cubeGL.object3D.lookAt(cubeGL.camera.position);
-        cubeGL.rotation.x += fixedOrientation.x;
-        cubeGL.rotation.y += fixedOrientation.y;
-        cubeGL.rotation.z += fixedOrientation.z;
-    }
+cubeGL.twistDuration = 300; //旋转速度
+const showNewFormula = (formula) => {
+  const container = document.getElementById("container");
+  container.childNodes.forEach((item) => {
+    container.removeChild(item);
+  });
+  container.appendChild(cubeGL.domElement);
+  if (controls === ERNO.Locked) {
+    const fixedOrientation = new THREE.Euler(Math.PI * 0.1, Math.PI * -0.25, 0);
+    cubeGL.object3D.lookAt(cubeGL.camera.position);
+    cubeGL.rotation.x += fixedOrientation.x;
+    cubeGL.rotation.y += fixedOrientation.y;
+    cubeGL.rotation.z += fixedOrientation.z;
+  }
 
-    cubeGL.twist(cubeGL.twist);
-}
-
+  cubeGL.twist(cubeGL.twist);
+};
 </script>
 
 <style scoped></style>

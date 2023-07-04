@@ -951,6 +951,7 @@
     var solve_step = ''
     for(step of solution)
     {
+      //学习点：公式的转换
       if(step == "U2") solve_step += "UU";
       else if(step == "D2") solve_step += "DD";
       else if(step == "L2") solve_step += "LL";

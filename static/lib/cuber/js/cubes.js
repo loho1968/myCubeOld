@@ -674,7 +674,6 @@ ERNO.extend(ERNO.Cube.prototype, {
 		this.historyQueue.empty();
 		this.undoing = false;
 		this.twistQueue.add(command);
-
 	},
 
 
@@ -783,9 +782,8 @@ ERNO.extend(ERNO.Cube.prototype, {
 	},
 
 
-	//  We can read and write text to the Cube.
-	//  This is handled by Folds which are composed of two Faces.
-
+	//  We can read and write text to the Cube.This is handled by Folds which are composed of two Faces.
+	//我们可以在立方体中读写文本。这是由两个面组成的折叠来处理的。
 	getText: function (fold) {
 
 		if (fold === undefined) {
