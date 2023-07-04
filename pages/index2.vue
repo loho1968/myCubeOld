@@ -170,6 +170,21 @@
                     <div id="left_right" class="flex-1"></div>
                   </div>
                 </div>
+                  <div class="flex justify-between w-full items-center">
+                      <div class="border-2 h-[550px] w-1/2">
+                          <div
+                                  class="text-center w-1/2 mt-2 items-center"
+                                  v-html="formulaTitle"
+                          ></div>
+                          <div id="container" class="flex-"></div>
+                      </div>
+                      <div class="h-[550px] border-2 w-1/2">
+                          <div class="text-center w-1/2 mt-2">
+                              <p class="text-2xl" v-html="reverseTitle"></p>
+                          </div>
+                          <div id="container_left_right" class="flex-1"></div>
+                      </div>
+                  </div>
               </div>
             </div>
           </div>
@@ -285,6 +300,7 @@ useHead({
     { src: "/static/lib/cube/js/util.js" },
     { src: "/static/lib/cube/js/lbl.js" },
     { src: "/static/lib/cube/js/two-phase.js" },
+    { src: "/static/lib/cubejs/solve.js" },
   ],
 });
 
@@ -296,6 +312,53 @@ const toggleDark = useToggle(isDark);
 //#endregion
 
 let tempFormula = ref("");
+const unDoFormulas = {};
+const twistFormula = {};
+
+Object.assign(unDoFormulas, { "B'": "B", B: "b", B2: "BB" });
+Object.assign(twistFormula, { "B'": "b", B: "B", B2: "BB" });
+
+Object.assign(unDoFormulas, { "D'": "D", D: "d", D2: "DD" });
+Object.assign(twistFormula, { "D'": "d", D: "D", D2: "DD" });
+
+Object.assign(unDoFormulas, { "E'": "E", E: "e", D2: "DD" });
+Object.assign(twistFormula, { "E'": "e", E: "E", D2: "DD" });
+
+Object.assign(unDoFormulas, { "F'": "F", F: "f", F2: "FF" });
+Object.assign(twistFormula, { "F'": "f", F: "F", F2: "FF" });
+
+Object.assign(unDoFormulas, { "L'": "L", L: "l", L2: "LL" });
+Object.assign(twistFormula, { "L'": "l", L: "L", L2: "LL" });
+
+Object.assign(unDoFormulas, { "M'": "M", M: "m", M2: "MM" });
+Object.assign(twistFormula, { "M'": "m", M: "M", M2: "MM" });
+
+Object.assign(unDoFormulas, { "M'": "M", M: "m", M2: "MM" });
+Object.assign(twistFormula, { "M'": "m", M: "M", M2: "MM" });
+
+Object.assign(unDoFormulas, { "R'": "R", R: "r", R2: "RR" });
+Object.assign(twistFormula, { "R'": "r", R: "R", R2: "RR" });
+
+Object.assign(unDoFormulas, { "S'": "S", S: "s", S2: "SS" });
+Object.assign(twistFormula, { "S'": "s", S: "S", S2: "SS" });
+
+Object.assign(unDoFormulas, { "U'": "U", U: "u", U2: "UU" });
+Object.assign(twistFormula, { "U'": "u", U: "U", U2: "UU" });
+
+Object.assign(unDoFormulas, { "F'": "F", F: "f", F2: "FF" });
+Object.assign(twistFormula, { "F'": "f", F: "F", F2: "FF" });
+
+Object.assign(unDoFormulas, { "F'": "F", F: "f", F2: "FF" });
+Object.assign(twistFormula, { "F'": "f", F: "F", F2: "FF" });
+
+Object.assign(unDoFormulas, { "r'": "mR", r: "Mr", r2: "mmRR" });
+Object.assign(twistFormula, { "r'": "Mr", r: "mR", r2: "mmRR" });
+
+Object.assign(unDoFormulas, { "u'": "SU", u: "su", r2: "SSUU" });
+Object.assign(twistFormula, { "u'": "su", u: "SU", r2: "SSUU" });
+
+Object.assign(unDoFormulas, { "u'": "SU", u: "su", r2: "SSUU" });
+Object.assign(twistFormula, { "u'": "su", u: "SU", r2: "SSUU" });
 
 const blindFormulaType = [
   {
@@ -570,55 +633,6 @@ const getReverseFormula = (formula) => {
 
   //B',D',D2,E,E',E2,F,F',F2,L,L',L2,M',M2,R',R2,R3,S,S',U',U2,f,f',f2,l,l',r',r2,u,u',u2,x,x'
 
-  //x x'
-  const unDoFormulas = {};
-  const twistFormula = {};
-
-  Object.assign(unDoFormulas, { "B'": "B", B: "b", B2: "BB" });
-  Object.assign(twistFormula, { "B'": "b", B: "B", B2: "BB" });
-
-  Object.assign(unDoFormulas, { "D'": "D", D: "d", D2: "DD" });
-  Object.assign(twistFormula, { "D'": "d", D: "D", D2: "DD" });
-
-  Object.assign(unDoFormulas, { "E'": "E", E: "e", D2: "DD" });
-  Object.assign(twistFormula, { "E'": "e", E: "E", D2: "DD" });
-
-  Object.assign(unDoFormulas, { "F'": "F", F: "f", F2: "FF" });
-  Object.assign(twistFormula, { "F'": "f", F: "F", F2: "FF" });
-
-  Object.assign(unDoFormulas, { "L'": "L", L: "l", L2: "LL" });
-  Object.assign(twistFormula, { "L'": "l", L: "L", L2: "LL" });
-
-  Object.assign(unDoFormulas, { "M'": "M", M: "m", M2: "MM" });
-  Object.assign(twistFormula, { "M'": "m", M: "M", M2: "MM" });
-
-  Object.assign(unDoFormulas, { "M'": "M", M: "m", M2: "MM" });
-  Object.assign(twistFormula, { "M'": "m", M: "M", M2: "MM" });
-
-  Object.assign(unDoForrulas, { "R'": "R", R: "r", R2: "RR" });
-  Object.assign(twistForrula, { "R'": "r", R: "R", R2: "RR" });
-
-  Object.assign(unDoForsulas, { "S'": "S", S: "s", S2: "SS" });
-  Object.assign(twistForsula, { "S'": "s", S: "S", S2: "SS" });
-
-  Object.assign(unDoForuulas, { "U'": "U", U: "u", U2: "UU" });
-  Object.assign(twistForuula, { "U'": "u", U: "U", U2: "UU" });
-
-  Object.assign(fnDoForfflas, { "F'": "F", F: "f", F2: "FF" });
-  Object.assign(twistForffla, { "F'": "f", F: "F", F2: "FF" });
-
-  Object.assign(fnDoForfflas, { "F'": "F", F: "f", F2: "FF" });
-  Object.assign(twistForffla, { "F'": "f", F: "F", F2: "FF" });
-
-  Object.assign(fnDoForfflas, { "r'": "mR", r: "Mr", r2: "mmRR" });
-  Object.assign(twistForffla, { "r'": "Mr", r: "mR", r2: "mmRR" });
-
-  Object.assign(fnDoForfflas, { "u'": "SU", u: "su", r2: "SSUU" });
-  Object.assign(twistForffla, { "u'": "su", u: "SU", r2: "SSUU" });
-
-  Object.assign(fnDoForfflas, { "u'": "SU", u: "su", r2: "SSUU" });
-  Object.assign(twistForffla, { "u'": "su", u: "SU", r2: "SSUU" });
-
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].indexOf("2") > -1 && "L2,R2,l2,r2".indexOf(arr[i]) == -1) {
       reserveFormula += " " + arr[i];
@@ -805,37 +819,55 @@ const resetForm = (formEl: FormInstance | undefined) => {
   dialogFormVisible.value = false;
   formEl.resetFields();
 };
+if (process.client) {
+  cubeTwoPhase = new Cube();
+  Cube.initSolver();
 
-cubeTwoPhase = new Cube();
-Cube.initSolver();
+  let controls = ERNO.Locked;
+  //controls=ERNO.Freeform;
 
-let controls = ERNO.Locked;
-//controls=ERNO.Freeform;
-
-window.cubeGL = new ERNO.Cube({
-  hideInvisibleFaces: true,
-  controls: controls,
-  renderer: isIe ? ERNO.renderers.IeCSS3D : null,
-  showCode: true, //学习点:是否显示Code,
-  showType: "edge", //学习点:显示层
-});
-cubeGL.twistDuration = 300; //旋转速度
-const showNewFormula = (formula) => {
-  const container = document.getElementById("container");
-  container.childNodes.forEach((item) => {
-    container.removeChild(item);
+  window.cubeGL = new ERNO.Cube({
+    hideInvisibleFaces: true,
+    controls: controls,
+    renderer:  null,
+    showCode: true, //学习点:是否显示Code,
+    showType: "edge", //学习点:显示层
   });
-  container.appendChild(cubeGL.domElement);
-  if (controls === ERNO.Locked) {
-    const fixedOrientation = new THREE.Euler(Math.PI * 0.1, Math.PI * -0.25, 0);
-    cubeGL.object3D.lookAt(cubeGL.camera.position);
-    cubeGL.rotation.x += fixedOrientation.x;
-    cubeGL.rotation.y += fixedOrientation.y;
-    cubeGL.rotation.z += fixedOrientation.z;
-  }
+  cubeGL.twistDuration = 300; //旋转速度
+  const showNewFormula = (formula) => {
+    const container = document.getElementById("container");
+    const newFormula = getNewFormula(formula);
+    console.log(newFormula);
+    container.childNodes.forEach((item) => {
+      container.removeChild(item);
+    });
+    container.appendChild(cubeGL.domElement);
+    if (controls === ERNO.Locked) {
+      const fixedOrientation = new THREE.Euler(
+        Math.PI * 0.1,
+        Math.PI * -0.25,
+        0
+      );
+      cubeGL.object3D.lookAt(cubeGL.camera.position);
+      cubeGL.rotation.x += fixedOrientation.x;
+      cubeGL.rotation.y += fixedOrientation.y;
+      cubeGL.rotation.z += fixedOrientation.z;
+    }
 
-  cubeGL.twist(cubeGL.twist);
-};
+    cubeGL.twist(cubeGL.twist);
+  };
+}
+
+function getNewFormula(formula) {
+  let result = "";
+  const arr = formula.split(" ");
+  for (let i = 0; i < arr.length; i++) {
+    if (twistFormula[arr[i]] == unDoFormulas)
+      console.error(twistFormula[arr[i]] + " 未找到");
+    result += " " + twistFormula[arr[i]];
+  }
+  return result.substring(1);
+}
 </script>
 
 <style scoped></style>
