@@ -568,7 +568,9 @@ const getReverseFormula = (formula) => {
   //B' D' D2 E  E' E2 F  F' F2 L L' L2 M' M2 R' R2 S  S' U' U2 f  f' f2 l  l' r' r2 u u' u2 x x'
   //B' D  D2 E' E  E2 F' F  F2 R R' R2 M' M2 L' L2 S' S  U  U2 f' f  f2 r  r' l' l2 u' u u2 x x'
 
-  //l  l' r' r2 u u' u2 x x'
+  //B',D',D2,E,E',E2,F,F',F2,L,L',L2,M',M2,R',R2,R3,S,S',U',U2,f,f',f2,l,l',r',r2,u,u',u2,x,x'
+
+  //u u' u2 x x'
   const unDoFormulas = {};
   const twistFormula = {};
 
@@ -604,6 +606,15 @@ const getReverseFormula = (formula) => {
 
   Object.assign(fnDoForfflas, { "F'": "F", F: "f", F2: "FF" });
   Object.assign(twistForffla, { "F'": "f", F: "F", F2: "FF" });
+
+  Object.assign(fnDoForfflas, { "F'": "F", F: "f", F2: "FF" });
+  Object.assign(twistForffla, { "F'": "f", F: "F", F2: "FF" });
+
+  Object.assign(fnDoForfflas, { "r'": "mR", r: "Mr", r2: "mmRR" });
+  Object.assign(twistForffla, { "r'": "Mr", r: "mR", r2: "mmRR" });
+
+  Object.assign(fnDoForfflas, { "u'": "SU", u: "su", r2: "SSUU" });
+  Object.assign(twistForffla, { "u'": "su", u: "SU", r2: "SSUU" });
 
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].indexOf("2") > -1 && "L2,R2,l2,r2".indexOf(arr[i]) == -1) {

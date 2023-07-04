@@ -400,7 +400,7 @@ for (let i = 0; i < blindFormula.length; i++) {
   //colorList
   arr = arr.reverse();
 }
-
+console.log(allFormulaCode);
 blindFormula = blindFormula.sort(function (a, b) {
   let x = a.Type.toLowerCase();
   let y = b.Type.toLowerCase();
