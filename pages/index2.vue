@@ -170,21 +170,21 @@
                     <div id="left_right" class="flex-1"></div>
                   </div>
                 </div>
-                  <div class="flex justify-between w-full items-center">
-                      <div class="border-2 h-[550px] w-1/2">
-                          <div
-                                  class="text-center w-1/2 mt-2 items-center"
-                                  v-html="formulaTitle"
-                          ></div>
-                          <div id="container" class="flex-"></div>
-                      </div>
-                      <div class="h-[550px] border-2 w-1/2">
-                          <div class="text-center w-1/2 mt-2">
-                              <p class="text-2xl" v-html="reverseTitle"></p>
-                          </div>
-                          <div id="container_left_right" class="flex-1"></div>
-                      </div>
-                  </div>
+<!--                <div class="flex justify-between w-full items-center">-->
+<!--                  <div class="border-2 h-[550px] w-1/2">-->
+<!--                    <div-->
+<!--                      class="text-center w-1/2 mt-2 items-center"-->
+<!--                      v-html="formulaTitle"-->
+<!--                    ></div>-->
+<!--                    <div id="container" class="flex-"></div>-->
+<!--                  </div>-->
+<!--                  <div class="h-[550px] border-2 w-1/2">-->
+<!--                    <div class="text-center w-1/2 mt-2">-->
+<!--                      <p class="text-2xl" v-html="reverseTitle"></p>-->
+<!--                    </div>-->
+<!--                    <div id="container_left_right" class="flex-1"></div>-->
+<!--                  </div>-->
+<!--                </div>-->
               </div>
             </div>
           </div>
@@ -273,10 +273,13 @@ useHead({
     { src: "/static/lib/cuber/js/vendor/threejs/src/math/Plane.js" },
     { src: "/static/lib/cuber/js/ERNO.js" },
     { src: "/static/lib/cuber/js/vendor/CSS3DRenderer.js" },
+
     { src: "/static/lib/cuber/js/utils/utils.js" },
     { src: "/static/lib/cuber/js/utils/Number.js" },
-    { src: "/static/lib/cuber/js/utils/String.js" },
+
+    // { src: "/static/lib/cuber/js/utils/String.js" },
     { src: "/static/lib/cuber/js/utils/Array.js" },
+
     { src: "/static/lib/cuber/js/colors.js" },
     { src: "/static/lib/cuber/js/directions.js" },
     { src: "/static/lib/cuber/js/queues.js" },
@@ -819,55 +822,55 @@ const resetForm = (formEl: FormInstance | undefined) => {
   dialogFormVisible.value = false;
   formEl.resetFields();
 };
-if (process.client) {
-  cubeTwoPhase = new Cube();
-  Cube.initSolver();
-
-  let controls = ERNO.Locked;
-  //controls=ERNO.Freeform;
-
-  window.cubeGL = new ERNO.Cube({
-    hideInvisibleFaces: true,
-    controls: controls,
-    renderer:  null,
-    showCode: true, //学习点:是否显示Code,
-    showType: "edge", //学习点:显示层
-  });
-  cubeGL.twistDuration = 300; //旋转速度
-  const showNewFormula = (formula) => {
-    const container = document.getElementById("container");
-    const newFormula = getNewFormula(formula);
-    console.log(newFormula);
-    container.childNodes.forEach((item) => {
-      container.removeChild(item);
-    });
-    container.appendChild(cubeGL.domElement);
-    if (controls === ERNO.Locked) {
-      const fixedOrientation = new THREE.Euler(
-        Math.PI * 0.1,
-        Math.PI * -0.25,
-        0
-      );
-      cubeGL.object3D.lookAt(cubeGL.camera.position);
-      cubeGL.rotation.x += fixedOrientation.x;
-      cubeGL.rotation.y += fixedOrientation.y;
-      cubeGL.rotation.z += fixedOrientation.z;
-    }
-
-    cubeGL.twist(cubeGL.twist);
-  };
-}
-
-function getNewFormula(formula) {
-  let result = "";
-  const arr = formula.split(" ");
-  for (let i = 0; i < arr.length; i++) {
-    if (twistFormula[arr[i]] == unDoFormulas)
-      console.error(twistFormula[arr[i]] + " 未找到");
-    result += " " + twistFormula[arr[i]];
-  }
-  return result.substring(1);
-}
+// if (process.client) {
+//   cubeTwoPhase = new Cube();
+//   Cube.initSolver();
+//
+//   let controls = ERNO.Locked;
+//   //controls=ERNO.Freeform;
+//
+//   window.cubeGL = new ERNO.Cube({
+//     hideInvisibleFaces: true,
+//     controls: controls,
+//     renderer:  null,
+//     showCode: true, //学习点:是否显示Code,
+//     showType: "edge", //学习点:显示层
+//   });
+//   cubeGL.twistDuration = 300; //旋转速度
+//   const showNewFormula = (formula) => {
+//     const container = document.getElementById("container");
+//     const newFormula = getNewFormula(formula);
+//     console.log(newFormula);
+//     container.childNodes.forEach((item) => {
+//       container.removeChild(item);
+//     });
+//     container.appendChild(cubeGL.domElement);
+//     if (controls === ERNO.Locked) {
+//       const fixedOrientation = new THREE.Euler(
+//         Math.PI * 0.1,
+//         Math.PI * -0.25,
+//         0
+//       );
+//       cubeGL.object3D.lookAt(cubeGL.camera.position);
+//       cubeGL.rotation.x += fixedOrientation.x;
+//       cubeGL.rotation.y += fixedOrientation.y;
+//       cubeGL.rotation.z += fixedOrientation.z;
+//     }
+//
+//     cubeGL.twist(cubeGL.twist);
+//   };
+// }
+//
+// function getNewFormula(formula) {
+//   let result = "";
+//   const arr = formula.split(" ");
+//   for (let i = 0; i < arr.length; i++) {
+//     if (twistFormula[arr[i]] == unDoFormulas)
+//       console.error(twistFormula[arr[i]] + " 未找到");
+//     result += " " + twistFormula[arr[i]];
+//   }
+//   return result.substring(1);
+// }
 </script>
 
 <style scoped></style>

@@ -5,14 +5,14 @@ export default defineNuxtConfig({
   app: {
     head: {
       script: [
-        // <script src="https://myawesome-lib.js"></script>
+      //   // <script src="https://myawesome-lib.js"></script>
         { src: "/static/js/jquery-3.7.0.min.js" },
-        { src: "/static/js/roofpig_and_three.js" },
+      //   { src: "/static/js/roofpig_and_three.js" },
       ],
-      link: [
-        // <link rel="stylesheet" href="https://myawesome-lib.css">
-        { rel: "stylesheet", href: "/static/css/cube.css" },
-      ],
+      // link: [
+      //   // <link rel="stylesheet" href="https://myawesome-lib.css">
+      //   { rel: "stylesheet", href: "/static/css/cube.css" },
+      // ],
     },
   },
   css: ["~/assets/css/tailwind.css"],

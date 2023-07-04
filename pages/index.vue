@@ -235,6 +235,11 @@ import type { FormInstance, FormRules } from "element-plus";
 
 useHead({
   title: "魔方练习",
+  script: [
+    { src: "/static/js/jquery-3.7.0.min.js" },
+    { src: "/static/js/roofpig_and_three.js" },
+  ],
+  link: [{ rel: "stylesheet", href: "/static/css/cube.css" }],
 });
 
 //#region theme
@@ -514,8 +519,6 @@ const getReverseFormula = (formula) => {
   let reserveFormula = "";
   //B' D' D2 E  E' E2 F  F' F2 L L' L2 M' M2 R' R2 S  S' U' U2 f  f' f2 l  l' r' r2 u u' u2 x x'
   //B' D  D2 E' E  E2 F' F  F2 R R' R2 M' M2 L' L2 S' S  U  U2 f' f  f2 r  r' l' l2 u' u u2 x x'
-
-
 
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].indexOf("2") > -1 && "L2,R2,l2,r2".indexOf(arr[i]) == -1) {
