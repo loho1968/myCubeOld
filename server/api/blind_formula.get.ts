@@ -8,7 +8,6 @@ export default defineEventHandler(async (event) => {
     console.error(error);
     return { code: 500, msg: error.msg };
   });
-  console.log(blindFormula);
 
   // @ts-ignore
   const cfop = await prisma.CFOP.findMany({}).catch((error) => {

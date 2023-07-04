@@ -137,7 +137,7 @@
               >
                 <!-- <div class="example-demonstration">分页</div> -->
                 <el-pagination
-                  v-model:current-page="currentPage"
+                  v-model:current-page="rowStore.page"
                   v-model:page-size="pageSize"
                   :page-sizes="[20, 28, 50, 60]"
                   :pager-count="5"
@@ -232,6 +232,7 @@ import type BlindFormulaCode from "@prisma/client";
 import type BlindFormula from "@prisma/client";
 import { useDark, useToggle } from "@vueuse/core";
 import type { FormInstance, FormRules } from "element-plus";
+import { useRowStore } from "~/stores/row";
 
 useHead({
   title: "魔方练习",
@@ -250,7 +251,7 @@ const toggleDark = useToggle(isDark);
 //#endregion
 
 let tempFormula = ref("");
-
+const rowStore = useRowStore();
 const blindFormulaType = [
   {
     value: "棱块",
@@ -448,6 +449,7 @@ const showBlindFormulaList = computed(() => {
 //改变页码
 const handleCurrentChange = (e) => {
   state.page = e;
+  rowStore.page = e;
 };
 
 const handleSizeChange = (e) => {
@@ -464,6 +466,7 @@ const CreateFormula = (id, alg, colored) => {
   );
 };
 const rowClick = (row) => {
+  rowStore.row = row;
   rowBlindFormula = row;
   tempFormula.value = row.Formula;
   changeTitle(rowBlindFormula);
@@ -596,7 +599,6 @@ const vueInstance = getCurrentInstance();
 const formulaTable = ref(null);
 const editFormula = (row) => {
   vueInstance.refs.formulaTable.setCurrentRow(row);
-
   rowBlindFormula = row;
   console.log(rowBlindFormula.value);
   dialogFormVisible.value = true;
@@ -706,6 +708,12 @@ const resetForm = (formEl: FormInstance | undefined) => {
   dialogFormVisible.value = false;
   formEl.resetFields();
 };
+
+onMounted(() => {
+  console.log(rowStore.row);
+  if (rowStore.row != "" && process.client)
+    vueInstance.refs.formulaTable.setCurrentRow(rowStore.row);
+});
 </script>
 
 <style scoped></style>

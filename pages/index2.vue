@@ -170,21 +170,17 @@
                     <div id="left_right" class="flex-1"></div>
                   </div>
                 </div>
-<!--                <div class="flex justify-between w-full items-center">-->
-<!--                  <div class="border-2 h-[550px] w-1/2">-->
-<!--                    <div-->
-<!--                      class="text-center w-1/2 mt-2 items-center"-->
-<!--                      v-html="formulaTitle"-->
-<!--                    ></div>-->
-<!--                    <div id="container" class="flex-"></div>-->
-<!--                  </div>-->
-<!--                  <div class="h-[550px] border-2 w-1/2">-->
-<!--                    <div class="text-center w-1/2 mt-2">-->
-<!--                      <p class="text-2xl" v-html="reverseTitle"></p>-->
-<!--                    </div>-->
-<!--                    <div id="container_left_right" class="flex-1"></div>-->
-<!--                  </div>-->
-<!--                </div>-->
+                <div class="flex justify-between w-full items-center">
+                  <div
+                    class="border-2 w-full items-center flex flex-col h-[700px]"
+                  >
+                    <div class="text-center" v-html="formulaTitle"></div>
+                    <div
+                      id="container"
+                      class="flex-1 w-[650px] h-[650px]"
+                    ></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -277,7 +273,7 @@ useHead({
     { src: "/static/lib/cuber/js/utils/utils.js" },
     { src: "/static/lib/cuber/js/utils/Number.js" },
 
-    // { src: "/static/lib/cuber/js/utils/String.js" },
+    { src: "/static/lib/cuber/js/utils/String.js" },
     { src: "/static/lib/cuber/js/utils/Array.js" },
 
     { src: "/static/lib/cuber/js/colors.js" },
@@ -603,13 +599,13 @@ const rowClick = (row) => {
   if (row.Colored != null) {
     colored = "|colored=" + baseColored + row.Colored;
   }
-  CreateFormula("simulator", row.Formula, colored);
+  // CreateFormula("simulator", row.Formula, colored);
   if (reserveFormula.Colored != null) {
     colored = "|colored=" + baseColored + reserveFormula.Colored;
   } else {
     colored = baseColored;
   }
-  CreateFormula("left_right", reserveFormula.Formula, colored);
+  // CreateFormula("left_right", reserveFormula.Formula, colored);
 
   showNewFormula(reserveFormula.Formula);
 };
@@ -822,55 +818,54 @@ const resetForm = (formEl: FormInstance | undefined) => {
   dialogFormVisible.value = false;
   formEl.resetFields();
 };
-// if (process.client) {
-//   cubeTwoPhase = new Cube();
-//   Cube.initSolver();
-//
-//   let controls = ERNO.Locked;
-//   //controls=ERNO.Freeform;
-//
-//   window.cubeGL = new ERNO.Cube({
-//     hideInvisibleFaces: true,
-//     controls: controls,
-//     renderer:  null,
-//     showCode: true, //学习点:是否显示Code,
-//     showType: "edge", //学习点:显示层
-//   });
-//   cubeGL.twistDuration = 300; //旋转速度
-//   const showNewFormula = (formula) => {
-//     const container = document.getElementById("container");
-//     const newFormula = getNewFormula(formula);
-//     console.log(newFormula);
-//     container.childNodes.forEach((item) => {
-//       container.removeChild(item);
-//     });
-//     container.appendChild(cubeGL.domElement);
-//     if (controls === ERNO.Locked) {
-//       const fixedOrientation = new THREE.Euler(
-//         Math.PI * 0.1,
-//         Math.PI * -0.25,
-//         0
-//       );
-//       cubeGL.object3D.lookAt(cubeGL.camera.position);
-//       cubeGL.rotation.x += fixedOrientation.x;
-//       cubeGL.rotation.y += fixedOrientation.y;
-//       cubeGL.rotation.z += fixedOrientation.z;
-//     }
-//
-//     cubeGL.twist(cubeGL.twist);
-//   };
-// }
-//
-// function getNewFormula(formula) {
-//   let result = "";
-//   const arr = formula.split(" ");
-//   for (let i = 0; i < arr.length; i++) {
-//     if (twistFormula[arr[i]] == unDoFormulas)
-//       console.error(twistFormula[arr[i]] + " 未找到");
-//     result += " " + twistFormula[arr[i]];
-//   }
-//   return result.substring(1);
-// }
+if (process.client) {
+  cubeTwoPhase = new Cube();
+  Cube.initSolver();
+
+  let controls = ERNO.Locked;
+  //controls=ERNO.Freeform;
+
+  window.cubeGL = new ERNO.Cube({
+    hideInvisibleFaces: true,
+    controls: controls,
+    renderer: null,
+    showCode: true, //学习点:是否显示Code,
+    showType: "edge", //学习点:显示层
+  });
+  cubeGL.twistDuration = 300; //旋转速度
+}
+
+const useLockedControls = true;
+let controls;
+if (process.client) controls = useLockedControls ? ERNO.Locked : ERNO.Freeform;
+const showNewFormula = (formula) => {
+  const container = document.getElementById("container");
+  const newFormula = getNewFormula(formula);
+  console.log(newFormula);
+  container.childNodes.forEach((item) => {
+    container.removeChild(item);
+  });
+  container.appendChild(cubeGL.domElement);
+  if (controls === ERNO.Locked) {
+    const fixedOrientation = new THREE.Euler(Math.PI * 0.1, Math.PI * -0.25, 0);
+    cubeGL.object3D.lookAt(cubeGL.camera.position);
+    cubeGL.rotation.x += fixedOrientation.x;
+    cubeGL.rotation.y += fixedOrientation.y;
+    cubeGL.rotation.z += fixedOrientation.z;
+  }
+
+  cubeGL.twist(cubeGL.twist);
+};
+function getNewFormula(formula) {
+  let result = "";
+  const arr = formula.split(" ");
+  for (let i = 0; i < arr.length; i++) {
+    if (twistFormula[arr[i]] == unDoFormulas)
+      console.error(twistFormula[arr[i]] + " 未找到");
+    result += " " + twistFormula[arr[i]];
+  }
+  return result.substring(1);
+}
 </script>
 
 <style scoped></style>
