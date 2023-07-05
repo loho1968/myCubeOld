@@ -53,8 +53,23 @@
             <div class="">
               <div id="" class="flex-1">
                 <div class="flex justify-between w-full items-center">
-                  <div class="border-2 w-1/2 h-[100vh]">
+                  <div
+                    class="border-2 w-1/2 h-[100vh] flex flex-col items-center"
+                  >
                     <div id="edge" class="h-full w-full"></div>
+                    <div v-show="formulaTitle!=''">
+                      <div class="mt-[-50px] w-full text-center">
+                        <div
+                          class="text-2xl font-medium"
+                          v-html="formulaTitle"
+                        ></div>
+                        <div
+                          class="flex justify-between items-center text-center"
+                        >
+                          <el-icon><DArrowLeft /></el-icon>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div class="border-2 w-1/2 h-[100vh]">
                     <div id="corner" class="h-full w-full"></div>
@@ -79,8 +94,8 @@ import type BlindFormulaGroup from "@prisma/client";
 import type BlindFormulaCode from "@prisma/client";
 import type BlindFormula from "@prisma/client";
 import { useDark, useToggle } from "@vueuse/core";
-import type { FormInstance, FormRules } from "element-plus";
-
+//import type { FormInstance, FormRules } from "element-plus";
+import { DArrowLeft } from "@element-plus/icons-vue";
 useHead({
   title: "魔方练习2",
   link: [{ rel: "stylesheet", href: "/static/lib/cuber/css/cuber.css" }],
@@ -299,6 +314,8 @@ if (process.client) {
 }
 
 const useLockedControls = true;
+let newFormula = reactive({ twistFormula: "", unDoFormula: "" });
+let formulaTitle = ref("");
 let controls;
 if (process.client) controls = useLockedControls ? ERNO.Locked : ERNO.Freeform;
 const showNewFormula = (formula = "") => {
@@ -328,7 +345,8 @@ const showNewFormula = (formula = "") => {
   });
   const edge = document.getElementById("edge");
   const corner = document.getElementById("corner");
-  const newFormula = getNewFormula(formula);
+  newFormula = getNewFormula(formula);
+  formulaTitle.value = newFormula.twistFormula;
   console.log(newFormula);
   edge.childNodes.forEach((item) => {
     edge.removeChild(item);
@@ -360,7 +378,7 @@ const showNewFormula = (formula = "") => {
 
   if (newFormula.unDoFormula != "") {
     cubeGLCorner.formula = newFormula;
-    cubeGLCorner.twist(newFormula.twistFormula)
+    cubeGLCorner.twist(newFormula.twistFormula);
   }
 };
 if (process.client) {
@@ -373,7 +391,7 @@ function getNewFormula(formula) {
   let twistResult = "";
   let arr = formula.split(" ");
   const reverseFormula = getReverseFormula(formula);
-  console.log(reverseFormula)
+  console.log(reverseFormula);
   for (let i = 0; i < arr.length; i++) {
     arr[i] = arr[i].replace(" ", "");
     if (arr[i] == "") continue;
