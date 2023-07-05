@@ -56,39 +56,70 @@
                   <div
                     class="border-2 w-1/2 h-[100vh] flex flex-col items-center"
                   >
-                      <div v-for="t in formulaTitle.split(' ')">
-                          <div>{{t}}</div>
-                      </div>
                     <div v-show="formulaTitle">
                       <div class="mt-[50px] w-full text-center">
                         <div
-                          class="text-2xl font-medium"
-                          v-html="formulaTitle"
-                        ></div>
-                        <div
-                          class="flex justify-between items-center text-center"
+                          class="flex justify-center text-2xl font-medium mt-[50px] text-center"
                         >
-                          <el-icon
-                            size="36"
-                            class="hover:border-2 hover:cursor-pointer"
-                            ><DArrowLeft
-                          /></el-icon>
-                          <el-icon
-                            size="36"
-                            class="hover:border-2 hover:cursor-pointer ml-4"
-                            ><ArrowLeft
-                          /></el-icon>
-                          <el-icon
-                            size="36"
-                            class="hover:border-2 hover:cursor-pointer ml-4"
-                            ><ArrowRight
-                          /></el-icon>
-                          <el-icon
-                            size="36"
-                            class="hover:border-2 hover:cursor-pointer ml-4"
-                            ><VideoPlay
-                          /></el-icon>
-                          <div>{{ codeIndex }}/{{ formulaLength }}</div>
+                          <div v-for="(t, index) in formulaTitle.split(' ')">
+                            <div v-if="t.indexOf('2') > -1">
+                              <el-badge :value="2" class="" type="info">
+                                <div
+                                  :class="[
+                                    'mr-3',
+                                    'mt-2',
+                                    'ml-2',
+                                    index <= currentIndex - 1
+                                      ? 'bg-blue-300'
+                                      : '',
+                                  ]"
+                                >
+                                  {{ t.substring(0, 1) }}
+                                </div>
+                              </el-badge>
+                            </div>
+                            <div
+                              v-else
+                              :class="[
+                                'mt-2',
+                                'mx-2',
+                                index <= currentIndex - 1 ? 'bg-blue-300' : '',
+                              ]"
+                            >
+                              {{ t }}
+                            </div>
+                          </div>
+                        </div>
+                        <div class="flex justify-between">
+                          <div class="flex text-center">
+                            <el-icon
+                              class="hover:border-2 hover:cursor-pointer"
+                              size="36"
+                              ><DArrowLeft
+                            /></el-icon>
+                            <el-icon
+                              class="hover:border-2 hover:cursor-pointer ml-4"
+                              size="36"
+                              @click="changeStep(-1, formulaLength)"
+                              ><ArrowLeft
+                            /></el-icon>
+                            <el-icon
+                              class="hover:border-2 hover:cursor-pointer ml-4"
+                              size="36"
+                              @click="changeStep(1, formulaLength)"
+                              ><ArrowRight
+                            /></el-icon>
+                            <el-icon
+                              class="hover:border-2 hover:cursor-pointer ml-4"
+                              size="36"
+                              ><VideoPlay
+                            /></el-icon>
+                          </div>
+                          <client-only>
+                            <div class="ml-10 mt-2 text-3xl min-w-[40px]">
+                              {{ currentIndex }}/{{ formulaLength }}
+                            </div>
+                          </client-only>
                         </div>
                       </div>
                     </div>
@@ -110,7 +141,6 @@
 <!--suppress TypeScriptUnresolvedReference -->
 <script lang="ts" setup>
 //#region 基础:import 变量声明等
-import { forEach } from "lodash-es";
 import type CFOP from "@prisma/client";
 import type BlindFormulaGroup from "@prisma/client";
 import type BlindFormulaCode from "@prisma/client";
@@ -118,13 +148,14 @@ import type BlindFormula from "@prisma/client";
 import { useDark, useToggle } from "@vueuse/core";
 //import type { FormInstance, FormRules } from "element-plus";
 import {
-  DArrowLeft,
   ArrowLeft,
   ArrowRight,
+  DArrowLeft,
   Moon,
   Sunny,
   VideoPlay,
 } from "@element-plus/icons-vue";
+
 useHead({
   title: "魔方练习2",
   link: [{ rel: "stylesheet", href: "/static/lib/cuber/css/cuber.css" }],
@@ -336,9 +367,9 @@ type formula = {
 };
 const useLockedControls = true;
 let newFormula = <formula>reactive({ twistFormula: "", unDoFormula: "" });
-let codeIndex = ref(0);
 let formulaLength = ref(0);
 let formulaTitle = ref("");
+let currentIndex = ref(0);
 let controls;
 if (process.client) controls = useLockedControls ? ERNO.Locked : ERNO.Freeform;
 const showNewFormula = (formula = "") => {
@@ -369,8 +400,9 @@ const showNewFormula = (formula = "") => {
   const edge = document.getElementById("edge");
   const corner = document.getElementById("corner");
   newFormula = getNewFormula(formula);
-  formulaTitle.value =formula;
-  formulaLength = newFormula.unDoFormula==undefined?0: newFormula.unDoFormula.split(" ").length;
+  formulaTitle.value = formula;
+  formulaLength = formula.split(" ").length;
+
   console.log(newFormula);
   edge.childNodes.forEach((item) => {
     edge.removeChild(item);
@@ -425,7 +457,7 @@ function getNewFormula(formula) {
     }
     twistResult += " " + twistFormula[arr[i]];
   }
-    twistResult=twistResult.substring(1);
+  twistResult = twistResult.substring(1);
   arr = reverseFormula.split(" ");
   for (let i = 0; i < arr.length; i++) {
     arr[i] = arr[i].replace(" ", "");
@@ -436,12 +468,21 @@ function getNewFormula(formula) {
     }
     unDoResult += " " + twistFormula[arr[i]];
   }
-    unDoResult=unDoResult.substring(1);
+  unDoResult = unDoResult.substring(1);
   return { unDoFormula: unDoResult, twistFormula: twistResult };
 }
 
 const showFormula = () => {
   showNewFormula(tempFormula.value);
+};
+const changeStep = (step, formulaLength) => {
+  console.log(currentIndex.value, formulaLength);
+  if (step == -1) {
+    if (currentIndex.value == 0) return;
+  } else {
+    if (currentIndex.value >= formulaLength) return;
+  }
+  currentIndex.value += step;
 };
 </script>
 

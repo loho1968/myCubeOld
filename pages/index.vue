@@ -600,8 +600,6 @@ const getMirrorFormula = (formula) => {
   return reserveFormula;
 };
 
-
-
 const vueInstance = getCurrentInstance();
 const formulaTable = ref(null);
 const editFormula = (row) => {
@@ -718,7 +716,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 
 onMounted(() => {
   currentPage.value = pageStore.currentPage;
-  if (rowStore.currentRow != "" && process.client) {
+  if (rowStore.currentRow.Code != undefined && process.client) {
     let tmp = {};
     vueInstance.refs.formulaTable.data.forEach((item, index) => {
       if (item.Code == rowStore.currentRow.Code) {
