@@ -8,7 +8,6 @@
         <div class="flex items-center">
           <div class="text-2xl mr-4">魔方学习</div>
 
-
           <div>
             <el-text type="primary"
               >F-前面 B-后面 R-右面 L左面 U-上面 D-下面 S-中间 E-水平中间
@@ -54,15 +53,11 @@
             <div class="">
               <div id="" class="flex-1">
                 <div class="flex justify-between w-full items-center">
-                  <div
-                    class="border-2 w-1/2 h-[100vh]"
-                  >
+                  <div class="border-2 w-1/2 h-[100vh]">
                     <div id="edge" class="h-full w-full"></div>
                   </div>
-                  <div
-                    class="border-2  w-1/2 h-[100vh]"
-                  >
-                    <div id="corner" class=" h-full w-full"></div>
+                  <div class="border-2 w-1/2 h-[100vh]">
+                    <div id="corner" class="h-full w-full"></div>
                   </div>
                 </div>
               </div>
@@ -156,48 +151,50 @@ let tempFormula = ref("");
 const unDoFormulas = {};
 const twistFormula = {};
 
-Object.assign(unDoFormulas, { "B'": "B", B: "b", B2: "BB" });
-Object.assign(twistFormula, { "B'": "b", B: "B", B2: "BB" });
+Object.assign(unDoFormulas, { "x'": "X", x: "x", x2: "X X" });
+Object.assign(twistFormula, { "x'": "x", x: "X", x2: "X X" });
 
-Object.assign(unDoFormulas, { "D'": "D", D: "d", D2: "DD" });
-Object.assign(twistFormula, { "D'": "d", D: "D", D2: "DD" });
+Object.assign(unDoFormulas, { "R'": "R", R: "r", R2: "R R" });
+Object.assign(twistFormula, { "R'": "r", R: "R", R2: "R R" });
 
-Object.assign(unDoFormulas, { "E'": "E", E: "e", D2: "DD" });
-Object.assign(twistFormula, { "E'": "e", E: "E", D2: "DD" });
+Object.assign(unDoFormulas, { "B'": "B", B: "b", B2: "B B" });
+Object.assign(twistFormula, { "B'": "b", B: "B", B2: "B B" });
 
-Object.assign(unDoFormulas, { "F'": "F", F: "f", F2: "FF" });
-Object.assign(twistFormula, { "F'": "f", F: "F", F2: "FF" });
+Object.assign(unDoFormulas, { "D'": "D", D: "d", D2: "D D" });
+Object.assign(twistFormula, { "D'": "d", D: "D", D2: "D D" });
 
-Object.assign(unDoFormulas, { "L'": "L", L: "l", L2: "LL" });
-Object.assign(twistFormula, { "L'": "l", L: "L", L2: "LL" });
+Object.assign(unDoFormulas, { "E'": "E", E: "e", E2: "D D" });
+Object.assign(twistFormula, { "E'": "e", E: "E", E2: "D D" });
 
-Object.assign(unDoFormulas, { "M'": "M", M: "m", M2: "MM" });
-Object.assign(twistFormula, { "M'": "m", M: "M", M2: "MM" });
+Object.assign(unDoFormulas, { "F'": "F", F: "f", F2: "F F" });
+Object.assign(twistFormula, { "F'": "f", F: "F", F2: "F F" });
 
-Object.assign(unDoFormulas, { "M'": "M", M: "m", M2: "MM" });
-Object.assign(twistFormula, { "M'": "m", M: "M", M2: "MM" });
+Object.assign(unDoFormulas, { "L'": "L", L: "l", L2: "L L" });
+Object.assign(twistFormula, { "L'": "l", L: "L", L2: "L L" });
 
-Object.assign(unDoFormulas, { "R'": "R", R: "r", R2: "RR" });
-Object.assign(twistFormula, { "R'": "r", R: "R", R2: "RR" });
+Object.assign(unDoFormulas, { "M'": "m", M: "M", M2: "M M" });
+Object.assign(twistFormula, { "M'": "M", M: "m", M2: "M M" });
 
-Object.assign(unDoFormulas, { "S'": "S", S: "s", S2: "SS" });
-Object.assign(twistFormula, { "S'": "s", S: "S", S2: "SS" });
+Object.assign(unDoFormulas, { "S'": "S", S: "s", S2: "S S" });
+Object.assign(twistFormula, { "S'": "s", S: "S", S2: "S S" });
 
-Object.assign(unDoFormulas, { "U'": "U", U: "u", U2: "UU" });
-Object.assign(twistFormula, { "U'": "u", U: "U", U2: "UU" });
+Object.assign(unDoFormulas, { "U'": "U", U: "u", U2: "U U" });
+Object.assign(twistFormula, { "U'": "u", U: "U", U2: "U U" });
 
-Object.assign(unDoFormulas, { "F'": "F", F: "f", F2: "FF" });
-Object.assign(twistFormula, { "F'": "f", F: "F", F2: "FF" });
+Object.assign(unDoFormulas, { "F'": "F", F: "f", F2: "F F" });
+Object.assign(twistFormula, { "F'": "f", F: "F", F2: "F F" });
 
-Object.assign(unDoFormulas, { "F'": "F", F: "f", F2: "FF" });
-Object.assign(twistFormula, { "F'": "f", F: "F", F2: "FF" });
+Object.assign(unDoFormulas, { "r'": "m R", r: "M r", r2: "M M R R" });
+Object.assign(twistFormula, { "r'": "M r", r: "m R", r2: "M M R R" });
 
-Object.assign(unDoFormulas, { "r'": "mR", r: "Mr", r2: "mmRR" });
-Object.assign(twistFormula, { "r'": "Mr", r: "mR", r2: "mmRR" });
+Object.assign(unDoFormulas, { "u'": "u e", u: "U E", u2: "U U E E" });
+Object.assign(twistFormula, { "u'": "U E", u: "u e", u2: "U U E E" });
 
+Object.assign(unDoFormulas, { "f'": "S F", f: "s f", f2: "S S F F" });
+Object.assign(twistFormula, { "f'": "s f", f: "S F", f2: "S S F F" });
 
-Object.assign(unDoFormulas, { "u'": "ue", u: "UE", r2: "UUEE" });
-Object.assign(twistFormula, { "u'": "UE", u: "ue", r2: "UUEE" });
+Object.assign(unDoFormulas, { "l'": "xR", l: "X r" });
+Object.assign(twistFormula, { "l'": "Xr", l: "x R" });
 
 const blindFormulaType = [
   {
@@ -247,7 +244,24 @@ await useFetch("/api/blind_formula").then((res) => {
 //#region 基础：计算盲拧公式颜色等
 
 //#endregion
-
+const getReverseFormula = (formula) => {
+  const arr = formula.split(" ");
+  let reverseFormula = "";
+  for (let i = arr.length - 1; i >= 0; i--) {
+    arr[i] = arr[i].replace(" ", "");
+    if (arr[i] == "") continue;
+    if (arr[i].indexOf("2") > -1) {
+      reverseFormula += " " + arr[i];
+      continue;
+    }
+    if (arr[i].indexOf("'") == -1) {
+      reverseFormula += " " + arr[i] + "'";
+    } else {
+      reverseFormula += " " + arr[i].replace("'", "");
+    }
+  }
+  return reverseFormula.substring(1);
+};
 const vueInstance = getCurrentInstance();
 const formulaTable = ref(null);
 const editFormula = (row) => {
@@ -257,7 +271,7 @@ const editFormula = (row) => {
   console.log(rowBlindFormula.value);
   dialogFormVisible.value = true;
 };
-let cubeEdge,cubeCorner;
+let cubeEdge, cubeCorner;
 if (process.client) {
   cubeEdge = new Cube();
   cubeCorner = new Cube();
@@ -287,31 +301,31 @@ if (process.client) {
 const useLockedControls = true;
 let controls;
 if (process.client) controls = useLockedControls ? ERNO.Locked : ERNO.Freeform;
-const showNewFormula = (formula="") => {
-    if(process.server) return;
-    cubeEdge = new Cube();
-    cubeCorner = new Cube();
-    Cube.initSolver();
+const showNewFormula = (formula = "") => {
+  if (process.server) return;
+  cubeEdge = new Cube();
+  cubeCorner = new Cube();
+  Cube.initSolver();
 
-    let controls = ERNO.Locked;
-    //controls=ERNO.Freeform;
+  let controls = ERNO.Locked;
+  //controls=ERNO.Freeform;
 
-    window.cubeGLEdge = new ERNO.Cube({
-        hideInvisibleFaces: true,
-        controls: controls,
-        renderer: null,
-        showCode: true, //学习点:是否显示Code,
-        showType: "edge", //学习点:显示层
-    });
-    cubeGLEdge.twistDuration = 300; //旋转速度
+  window.cubeGLEdge = new ERNO.Cube({
+    hideInvisibleFaces: true,
+    controls: controls,
+    renderer: null,
+    showCode: true, //学习点:是否显示Code,
+    showType: "edge", //学习点:显示层
+  });
+  cubeGLEdge.twistDuration = 300; //旋转速度
 
-    window.cubeGLCorner = new ERNO.Cube({
-        hideInvisibleFaces: true,
-        controls: controls,
-        renderer: null,
-        showCode: true, //学习点:是否显示Code,
-        showType: "corner", //学习点:显示层
-    });
+  window.cubeGLCorner = new ERNO.Cube({
+    hideInvisibleFaces: true,
+    controls: controls,
+    renderer: null,
+    showCode: true, //学习点:是否显示Code,
+    showType: "corner", //学习点:显示层
+  });
   const edge = document.getElementById("edge");
   const corner = document.getElementById("corner");
   const newFormula = getNewFormula(formula);
@@ -327,10 +341,11 @@ const showNewFormula = (formula="") => {
     cubeGLEdge.rotation.y += fixedOrientation.y;
     cubeGLEdge.rotation.z += fixedOrientation.z;
   }
-  if(formula!="") {
-      cubeGLEdge.formula=newFormula
-      cubeGLEdge.twist(newFormula.unDoFormula);
-    }
+
+  if (newFormula.unDoFormula != "") {
+    cubeGLEdge.formula = newFormula;
+    cubeGLEdge.twist(newFormula.twistFormula);
+  }
   corner.childNodes.forEach((item) => {
     corner.removeChild(item);
   });
@@ -343,35 +358,51 @@ const showNewFormula = (formula="") => {
     cubeGLCorner.rotation.z += fixedOrientation.z;
   }
 
-    if(formula!="")  {
-        cubeGLCorner.formula=newFormula
-        cubeGLCorner.twist(newFormula.unDoFormula);
-    }
+  if (newFormula.unDoFormula != "") {
+    cubeGLCorner.formula = newFormula;
+    cubeGLCorner.twist(newFormula.twistFormula)
+  }
 };
-if(process.client) {
-    showNewFormula('');
+if (process.client) {
+  showNewFormula("");
 }
 
 function getNewFormula(formula) {
-    if(formula=="") return "";
+  if (formula == "") return "";
   let unDoResult = "";
-  let twistResult="";
-  const arr = formula.split(" ");
-
+  let twistResult = "";
+  let arr = formula.split(" ");
+  const reverseFormula = getReverseFormula(formula);
+  console.log(reverseFormula)
   for (let i = 0; i < arr.length; i++) {
-    if (twistFormula[arr[i]] == undefined)
-      console.error(twistFormula[arr[i]] + " 未找到--twistFormula");
-      if (unDoFormulas[arr[i]] == undefined)
-          console.error(unDoFormulas[arr[i]] + " 未找到--unDoFormulas");
-      twistResult += " " + twistFormula[arr[i]];
-      unDoResult += " " + unDoFormulas[arr[i]];
+    arr[i] = arr[i].replace(" ", "");
+    if (arr[i] == "") continue;
+    if (twistFormula[arr[i]] == undefined) {
+      ElMessage.error(arr[i] + " 未找到--twistResult");
+      continue;
+    }
+    twistResult += " " + twistFormula[arr[i]];
   }
-  return {unDoFormula:unDoResult,twistFormula:twistResult};
+  arr = reverseFormula.split(" ");
+  for (let i = 0; i < arr.length; i++) {
+    arr[i] = arr[i].replace(" ", "");
+    if (arr[i] == "") continue;
+    if (twistFormula[arr[i]] == undefined) {
+      ElMessage.error(arr[i] + " 未找到--unDoResult");
+      continue;
+    }
+    unDoResult += " " + twistFormula[arr[i]];
+  }
+  return { unDoFormula: unDoResult, twistFormula: twistResult };
 }
 
-const showFormula=()=>{
+const showFormula = () => {
   showNewFormula(tempFormula.value);
-}
+};
 </script>
 
-<style scoped></style>
+<style>
+.cube .sticker {
+  font-size: smaller !important;
+}
+</style>

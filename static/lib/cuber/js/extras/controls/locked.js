@@ -377,9 +377,10 @@ ERNO.Locked = function ( cube, camera, domElement ) {
 
 			angle = -( absDirection.dot( direction ) / cube.size ) ;
 			if( group === cube.slicesDictionary[ 'z' ]  ) angle *= -1;
+			if(isNaN(sign) || sign===undefined) sign=1;
 			angle *= sign;
 			// group.rotation = Math.min( Math.PI * 0.5, Math.max( Math.PI * -0.5, angle * api.rotationSpeed ));
-			group.rotation = angle * api.rotationSpeed;
+			if(group!==undefined) group.rotation = angle * api.rotationSpeed;
 
 		}
 

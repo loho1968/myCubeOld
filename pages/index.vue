@@ -88,7 +88,7 @@
                 style="width: 100%"
                 @row-click="rowClick"
               >
-                  <el-table-column type="index" width="50" />
+                <el-table-column type="index" width="50" />
                 <el-table-column
                   header-align="center"
                   label="公式"
@@ -234,7 +234,7 @@ import type BlindFormula from "@prisma/client";
 import { useDark, useToggle } from "@vueuse/core";
 import type { FormInstance, FormRules } from "element-plus";
 import { useRowStore } from "~/stores/row";
-import {usePageStore} from "~/stores/page";
+import { usePageStore } from "~/stores/page";
 
 useHead({
   title: "魔方练习",
@@ -254,9 +254,8 @@ const toggleDark = useToggle(isDark);
 
 let tempFormula = ref("");
 let rowStore = useRowStore();
-let pageStore=usePageStore();
+let pageStore = usePageStore();
 let currentPage = ref(1);
-
 
 const blindFormulaType = [
   {
@@ -454,7 +453,7 @@ const showBlindFormulaList = computed(() => {
 //改变页码
 const handleCurrentChange = (e) => {
   state.page = e;
-  pageStore.currentPage=e;
+  pageStore.currentPage = e;
 };
 
 const handleSizeChange = (e) => {
@@ -480,7 +479,7 @@ const rowClick = (row) => {
   item.innerHTML = "";
   item = document.getElementById("left_right");
   item.innerHTML = "";
-  let reserve = getReverseFormula(rowBlindFormula.Formula);
+  let reserve = getMirrorFormula(rowBlindFormula.Formula);
   let reserveFormula = {};
   const tmp = blindFormula.filter(
     (r) => r.Formula == reserve && r.Type == row.Type
@@ -523,7 +522,7 @@ const showTempFormula = () => {
   CreateFormula("simulator", f, baseColored);
 };
 
-const getReverseFormula = (formula) => {
+const getMirrorFormula = (formula) => {
   const arr = formula.split(" ");
   let reserveFormula = "";
   //B' D' D2 E  E' E2 F  F' F2 L L' L2 M' M2 R' R2 S  S' U' U2 f  f' f2 l  l' r' r2 u u' u2 x x'
@@ -600,6 +599,8 @@ const getReverseFormula = (formula) => {
   reserveFormula = reserveFormula.substring(1);
   return reserveFormula;
 };
+
+
 
 const vueInstance = getCurrentInstance();
 const formulaTable = ref(null);
@@ -715,22 +716,22 @@ const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
 };
 
-
 onMounted(() => {
-    currentPage.value=pageStore.currentPage;
+  currentPage.value = pageStore.currentPage;
   if (rowStore.currentRow != "" && process.client) {
-      let tmp={}
-      vueInstance.refs.formulaTable.data.forEach((item,index)=>{
-          if(item.Code==rowStore.currentRow.Code){
-              tmp=item
-              tmp.index=index
-          }
-      })
-      vueInstance.refs.formulaTable.setCurrentRow(vueInstance.refs.formulaTable.data[tmp.index]);
-      rowClick(tmp)
+    let tmp = {};
+    vueInstance.refs.formulaTable.data.forEach((item, index) => {
+      if (item.Code == rowStore.currentRow.Code) {
+        tmp = item;
+        tmp.index = index;
+      }
+    });
+    vueInstance.refs.formulaTable.setCurrentRow(
+      vueInstance.refs.formulaTable.data[tmp.index]
+    );
+    rowClick(tmp);
   }
 });
-
 </script>
 
 <style scoped></style>
