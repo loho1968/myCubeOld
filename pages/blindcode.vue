@@ -56,9 +56,11 @@
                   <div
                     class="border-2 w-1/2 h-[100vh] flex flex-col items-center"
                   >
-                    <div id="edge" class="h-full w-full"></div>
-                    <div v-show="formulaTitle!=''">
-                      <div class="mt-[-50px] w-full text-center">
+                      <div v-for="t in formulaTitle.split(' ')">
+                          <div>{{t}}</div>
+                      </div>
+                    <div v-show="formulaTitle">
+                      <div class="mt-[50px] w-full text-center">
                         <div
                           class="text-2xl font-medium"
                           v-html="formulaTitle"
@@ -66,10 +68,31 @@
                         <div
                           class="flex justify-between items-center text-center"
                         >
-                          <el-icon><DArrowLeft /></el-icon>
+                          <el-icon
+                            size="36"
+                            class="hover:border-2 hover:cursor-pointer"
+                            ><DArrowLeft
+                          /></el-icon>
+                          <el-icon
+                            size="36"
+                            class="hover:border-2 hover:cursor-pointer ml-4"
+                            ><ArrowLeft
+                          /></el-icon>
+                          <el-icon
+                            size="36"
+                            class="hover:border-2 hover:cursor-pointer ml-4"
+                            ><ArrowRight
+                          /></el-icon>
+                          <el-icon
+                            size="36"
+                            class="hover:border-2 hover:cursor-pointer ml-4"
+                            ><VideoPlay
+                          /></el-icon>
+                          <div>{{ codeIndex }}/{{ formulaLength }}</div>
                         </div>
                       </div>
                     </div>
+                    <div id="edge" class="h-full w-full"></div>
                   </div>
                   <div class="border-2 w-1/2 h-[100vh]">
                     <div id="corner" class="h-full w-full"></div>
@@ -88,14 +111,20 @@
 <script lang="ts" setup>
 //#region 基础:import 变量声明等
 import { forEach } from "lodash-es";
-import { Moon, Sunny, VideoPlay } from "@element-plus/icons-vue";
 import type CFOP from "@prisma/client";
 import type BlindFormulaGroup from "@prisma/client";
 import type BlindFormulaCode from "@prisma/client";
 import type BlindFormula from "@prisma/client";
 import { useDark, useToggle } from "@vueuse/core";
 //import type { FormInstance, FormRules } from "element-plus";
-import { DArrowLeft } from "@element-plus/icons-vue";
+import {
+  DArrowLeft,
+  ArrowLeft,
+  ArrowRight,
+  Moon,
+  Sunny,
+  VideoPlay,
+} from "@element-plus/icons-vue";
 useHead({
   title: "魔方练习2",
   link: [{ rel: "stylesheet", href: "/static/lib/cuber/css/cuber.css" }],
@@ -221,9 +250,7 @@ const blindFormulaType = [
     label: "角块",
   },
 ];
-const typeValue = ref("棱块");
-const pageRows = ref(20);
-const searchFormulaCode = ref("");
+
 let dialogFormVisible = ref(false);
 
 let cfopList: CFOP[] = [];
@@ -278,14 +305,7 @@ const getReverseFormula = (formula) => {
   return reverseFormula.substring(1);
 };
 const vueInstance = getCurrentInstance();
-const formulaTable = ref(null);
-const editFormula = (row) => {
-  vueInstance.refs.formulaTable.setCurrentRow(row);
 
-  rowBlindFormula = row;
-  console.log(rowBlindFormula.value);
-  dialogFormVisible.value = true;
-};
 let cubeEdge, cubeCorner;
 if (process.client) {
   cubeEdge = new Cube();
@@ -293,8 +313,6 @@ if (process.client) {
   Cube.initSolver();
 
   let controls = ERNO.Locked;
-  //controls=ERNO.Freeform;
-
   window.cubeGLEdge = new ERNO.Cube({
     hideInvisibleFaces: true,
     controls: controls,
@@ -312,9 +330,14 @@ if (process.client) {
     showType: "corner", //学习点:显示层
   });
 }
-
+type formula = {
+  twistFormula: string[];
+  unDoFormula: string[];
+};
 const useLockedControls = true;
-let newFormula = reactive({ twistFormula: "", unDoFormula: "" });
+let newFormula = <formula>reactive({ twistFormula: "", unDoFormula: "" });
+let codeIndex = ref(0);
+let formulaLength = ref(0);
 let formulaTitle = ref("");
 let controls;
 if (process.client) controls = useLockedControls ? ERNO.Locked : ERNO.Freeform;
@@ -346,7 +369,8 @@ const showNewFormula = (formula = "") => {
   const edge = document.getElementById("edge");
   const corner = document.getElementById("corner");
   newFormula = getNewFormula(formula);
-  formulaTitle.value = newFormula.twistFormula;
+  formulaTitle.value =formula;
+  formulaLength = newFormula.unDoFormula==undefined?0: newFormula.unDoFormula.split(" ").length;
   console.log(newFormula);
   edge.childNodes.forEach((item) => {
     edge.removeChild(item);
@@ -401,6 +425,7 @@ function getNewFormula(formula) {
     }
     twistResult += " " + twistFormula[arr[i]];
   }
+    twistResult=twistResult.substring(1);
   arr = reverseFormula.split(" ");
   for (let i = 0; i < arr.length; i++) {
     arr[i] = arr[i].replace(" ", "");
@@ -411,6 +436,7 @@ function getNewFormula(formula) {
     }
     unDoResult += " " + twistFormula[arr[i]];
   }
+    unDoResult=unDoResult.substring(1);
   return { unDoFormula: unDoResult, twistFormula: twistResult };
 }
 
