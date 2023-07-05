@@ -2,11 +2,9 @@ export const useRowStore = defineStore(
   "row",
   () => {
     // @ts-ignore
-    const row = ref("");
-    const page = ref(1);
+    let currentRow = ref({});
     return {
-      row,
-      page,
+        currentRow,
     };
   },
   {

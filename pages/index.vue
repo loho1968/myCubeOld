@@ -88,6 +88,7 @@
                 style="width: 100%"
                 @row-click="rowClick"
               >
+                  <el-table-column type="index" width="50" />
                 <el-table-column
                   header-align="center"
                   label="公式"
@@ -137,7 +138,7 @@
               >
                 <!-- <div class="example-demonstration">分页</div> -->
                 <el-pagination
-                  v-model:current-page="rowStore.page"
+                  v-model:current-page="currentPage"
                   v-model:page-size="pageSize"
                   :page-sizes="[20, 28, 50, 60]"
                   :pager-count="5"
@@ -233,6 +234,7 @@ import type BlindFormula from "@prisma/client";
 import { useDark, useToggle } from "@vueuse/core";
 import type { FormInstance, FormRules } from "element-plus";
 import { useRowStore } from "~/stores/row";
+import {usePageStore} from "~/stores/page";
 
 useHead({
   title: "魔方练习",
@@ -251,7 +253,11 @@ const toggleDark = useToggle(isDark);
 //#endregion
 
 let tempFormula = ref("");
-const rowStore = useRowStore();
+let rowStore = useRowStore();
+let pageStore=usePageStore();
+let currentPage = ref(1);
+
+
 const blindFormulaType = [
   {
     value: "棱块",
@@ -303,7 +309,6 @@ function changeReserveTitle(formula) {
     formula.Code
   }-${formula.ThinkCode}--${colorFormatter(formula.ColorDesc)}</div>`;
 }
-const currentPage = ref(1);
 const pageSize = ref(28);
 //#endregion
 
@@ -449,7 +454,7 @@ const showBlindFormulaList = computed(() => {
 //改变页码
 const handleCurrentChange = (e) => {
   state.page = e;
-  rowStore.page = e;
+  pageStore.currentPage=e;
 };
 
 const handleSizeChange = (e) => {
@@ -466,7 +471,8 @@ const CreateFormula = (id, alg, colored) => {
   );
 };
 const rowClick = (row) => {
-  rowStore.row = row;
+  rowStore.currentRow = row;
+  localStorage.setItem("currentRow", JSON.stringify(row));
   rowBlindFormula = row;
   tempFormula.value = row.Formula;
   changeTitle(rowBlindFormula);
@@ -709,11 +715,22 @@ const resetForm = (formEl: FormInstance | undefined) => {
   formEl.resetFields();
 };
 
+
 onMounted(() => {
-  console.log(rowStore.row);
-  if (rowStore.row != "" && process.client)
-    vueInstance.refs.formulaTable.setCurrentRow(rowStore.row);
+    currentPage.value=pageStore.currentPage;
+  if (rowStore.currentRow != "" && process.client) {
+      let tmp={}
+      vueInstance.refs.formulaTable.data.forEach((item,index)=>{
+          if(item.Code==rowStore.currentRow.Code){
+              tmp=item
+              tmp.index=index
+          }
+      })
+      vueInstance.refs.formulaTable.setCurrentRow(vueInstance.refs.formulaTable.data[tmp.index]);
+      rowClick(tmp)
+  }
 });
+
 </script>
 
 <style scoped></style>
