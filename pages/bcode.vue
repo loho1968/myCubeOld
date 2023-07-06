@@ -671,7 +671,7 @@ if (process.client) {
     controls: controls,
     renderer: null,
     showCode: true, //学习点:是否显示Code,
-    showType: "edge", //学习点:显示层
+    showType: typeValue.value == "棱块" ? "edge" : "corner", //学习点:显示代码块类型
   });
   cubeGLEdge.twistDuration = 300; //旋转速度
 
@@ -680,7 +680,7 @@ if (process.client) {
     controls: controls,
     renderer: null,
     showCode: true, //学习点:是否显示Code,
-    showType: "corner", //学习点:显示层
+    showType: typeValue.value == "棱块" ? "edge" : "corner", //学习点:显示代码块类型
   });
 }
 //#endregion
@@ -887,7 +887,7 @@ const showNewFormula = (formula = "") => {
     controls: controls,
     renderer: null,
     showCode: true, //学习点:是否显示Code,
-    showType: "edge", //学习点:显示层
+    showType: typeValue.value == "棱块" ? "edge" : "corner", //学习点:显示代码块类型
   });
   cubeGLEdge.twistDuration = 300; //旋转速度
 
@@ -927,7 +927,7 @@ const showNewMirrorFormula = (formula = "") => {
     controls: controls,
     renderer: null,
     showCode: true, //学习点:是否显示Code,
-    showType: "corner", //学习点:显示层
+    showType: typeValue.value == "棱块" ? "edge" : "corner", //学习点:显示代码块类型
   });
   cubeGLCorner.twistDuration = 300; //旋转速度
 
