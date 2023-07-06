@@ -28,7 +28,7 @@
               :icon="VideoPlay"
               round
               size="default"
-              @click="showFormula"
+              @click="showNewFormula(tempFormula);"
               >show</el-button
             >
           </div>
@@ -157,7 +157,7 @@ import {
 } from "@element-plus/icons-vue";
 
 useHead({
-  title: "魔方练习2",
+  title: "魔方练习3",
   link: [{ rel: "stylesheet", href: "/static/lib/cuber/css/cuber.css" }],
   script: [
     { src: "/static/lib/cuber/js/vendor/tween.min.js" },
@@ -338,12 +338,18 @@ const getReverseFormula = (formula) => {
 const vueInstance = getCurrentInstance();
 
 let cubeEdge, cubeCorner;
+const useLockedControls = false;
+let newFormula = <formula>reactive({ twistFormula: "", unDoFormula: "" });
+let formulaLength = ref(0);
+let formulaTitle = ref("");
+let currentIndex = ref(0);
+let controls;
+if (process.client) controls = useLockedControls ? ERNO.Locked : ERNO.Freeform;
 if (process.client) {
   cubeEdge = new Cube();
   cubeCorner = new Cube();
   Cube.initSolver();
 
-  let controls = ERNO.Locked;
   window.cubeGLEdge = new ERNO.Cube({
     hideInvisibleFaces: true,
     controls: controls,
@@ -365,13 +371,7 @@ type formula = {
   twistFormula: string[];
   unDoFormula: string[];
 };
-const useLockedControls = true;
-let newFormula = <formula>reactive({ twistFormula: "", unDoFormula: "" });
-let formulaLength = ref(0);
-let formulaTitle = ref("");
-let currentIndex = ref(0);
-let controls;
-if (process.client) controls = useLockedControls ? ERNO.Locked : ERNO.Freeform;
+
 const showNewFormula = (formula = "") => {
   if (process.server) return;
   cubeEdge = new Cube();
@@ -472,9 +472,7 @@ function getNewFormula(formula) {
   return { unDoFormula: unDoResult, twistFormula: twistResult };
 }
 
-const showFormula = () => {
-  showNewFormula(tempFormula.value);
-};
+
 const changeStep = (step, formulaLength) => {
   console.log(currentIndex.value, formulaLength);
   if (step == -1) {
