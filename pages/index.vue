@@ -140,7 +140,7 @@
                 <el-pagination
                   v-model:current-page="currentPage"
                   v-model:page-size="pageSize"
-                  :page-sizes="[20, 28, 50, 60]"
+                  :page-sizes="[20,40,60,80]"
                   :pager-count="5"
                   :total="state.total"
                   background
@@ -166,7 +166,7 @@
                   </div>
                   <div class="h-[550px] border-2 w-1/2">
                     <div class="text-center w-1/2 mt-2">
-                      <p class="text-2xl" v-html="reverseTitle"></p>
+                      <p class="text-2xl" v-html="mirrorTitle"></p>
                     </div>
                     <div id="left_right" class="flex-1"></div>
                   </div>
@@ -268,7 +268,7 @@ const blindFormulaType = [
   },
 ];
 const typeValue = ref("棱块");
-const pageRows = ref(20);
+
 const searchFormulaCode = ref("");
 let dialogFormVisible = ref(false);
 
@@ -287,7 +287,7 @@ let rowBlindFormula = ref<BlindFormula>({
 });
 
 let formulaTitle = ref("");
-let reverseTitle = ref("");
+let mirrorTitle = ref("");
 function changeTitle(formula) {
   if (formula.Code == undefined || formula.Code == "") {
     formulaTitle.value = "";
@@ -297,18 +297,18 @@ function changeTitle(formula) {
     formula.Code
   }-${formula.ThinkCode}--${colorFormatter(formula.ColorDesc)}</div>`;
 }
-function changeReserveTitle(formula) {
+function changeMirrorTitle(formula) {
   if (formula.Code == undefined || formula.Code == "") {
-    reverseTitle.value = "";
+    mirrorTitle.value = "";
     return;
   }
   const colorDesc =
     formula.Code != "" ? formula.ColorDesc.split(",") : formula.ColorDesc;
-  reverseTitle.value = `<div  class="flex justify-center text-2xl">${
+  mirrorTitle.value = `<div  class="flex justify-center text-2xl">${
     formula.Code
   }-${formula.ThinkCode}--${colorFormatter(formula.ColorDesc)}</div>`;
 }
-const pageSize = ref(28);
+const pageSize = ref(20);
 //#endregion
 
 await useFetch("/api/blind_formula").then((res) => {
@@ -439,7 +439,7 @@ blindFormula = blindFormula.sort(function (a, b) {
 
 const state = reactive({
   page: 1,
-  limit: pageRows.value,
+  limit: pageSize.value,
   total: blindFormula.length,
 });
 
@@ -493,7 +493,7 @@ const rowClick = (row) => {
     reserveFormula.ThinkCode = "";
     reserveFormula.ColorDesc = reserve;
   }
-  changeReserveTitle(reserveFormula);
+  changeMirrorTitle(reserveFormula);
   let colored = "";
   const baseColored = "U D L R F B";
   if (row.Colored != null) {
