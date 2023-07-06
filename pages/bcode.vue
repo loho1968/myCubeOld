@@ -161,12 +161,12 @@
                     <div
                       class="border-2 w-1/2 h-[100vh] flex flex-col items-center"
                     >
-                      <div v-show="formulaTitle">
+                      <div v-show="formulaText">
                         <div class="w-full text-center">
                           <div
                             class="flex justify-between text-2xl font-medium mt-[15px] text-center"
                           >
-                            <div v-for="(t, index) in formulaTitle.split(' ')">
+                            <div v-for="(t, index) in formulaText.split(' ')">
                               <div v-if="t.indexOf('2') > -1">
                                 <el-badge :value="2" class="" type="info">
                                   <div
@@ -218,11 +218,83 @@
                             </client-only>
                           </div>
                         </div>
+                        <div class="text-2xl mt-1" v-html="formulaTitle"></div>
                       </div>
                       <div id="simulator" class="h-full w-full"></div>
                     </div>
-                    <div class="border-2 w-1/2 h-[100vh]">
-                      <div id="left_right" class="h-full w-full"></div>
+                    <div
+                      class="border-2 w-1/2 h-[100vh] flex flex-col items-center"
+                    >
+                      <div v-show="mirrorTitle">
+                        <div class="w-full text-center">
+                          <div
+                            class="flex justify-between text-2xl font-medium mt-[15px] text-center"
+                          >
+                            <div v-for="(t, index) in mirrorTitle.split(' ')">
+                              <div v-if="t.indexOf('2') > -1">
+                                <el-badge :value="2" class="" type="info">
+                                  <div
+                                    :class="[
+                                      index <= mirrorCurrentIndex
+                                        ? 'bg-blue-300'
+                                        : '',
+                                    ]"
+                                  >
+                                    {{ t.substring(0, 1) }}
+                                  </div>
+                                </el-badge>
+                              </div>
+                              <div
+                                v-else
+                                :class="[
+                                  index <= mirrorCurrentIndex
+                                    ? 'bg-blue-300'
+                                    : '',
+                                ]"
+                              >
+                                {{ t }}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="flex justify-between">
+                            <div class="flex mt-2">
+                              <el-button
+                                :disabled="mirrorCurrentIndex == -1"
+                                text
+                                @click="
+                                  changeMirrorStep(999, mirrorCurrentIndex)
+                                "
+                                ><el-icon size="30"><DArrowLeft /></el-icon
+                              ></el-button>
+                              <el-button
+                                :disabled="mirrorCurrentIndex == -1"
+                                text
+                                @click="
+                                  changeMirrorStep(-1, mirrorCurrentIndex)
+                                "
+                                ><el-icon size="30"><ArrowLeft /></el-icon
+                              ></el-button>
+                              <el-button
+                                :disabled="
+                                  mirrorCurrentIndex == mirrorCurrentIndex - 1
+                                "
+                                text
+                                @click="changeMirrorStep(1, mirrorCurrentIndex)"
+                                ><el-icon size="30"><ArrowRight /></el-icon
+                              ></el-button>
+                            </div>
+                            <client-only>
+                              <div class="ml-10 mt-2 text-3xl min-w-[40px]">
+                                {{ mirrorCurrentIndex + 1 }}/{{
+                                  mirrorFormulaLength
+                                }}
+                              </div>
+                            </client-only>
+                          </div>
+                          <div class="text-2xl mt-1" v-html="mirrorCode"></div>
+                        </div>
+                      </div>
+                      <div id="mirrorSimulator" class="h-full w-full"></div>
                     </div>
                   </div>
                 </div>
@@ -442,9 +514,10 @@ const colorBackGroundList = {
 const ruleFormRef = ref<FormInstance>();
 //#endregion
 
-let formulaTitle = ref(""); //公式显示Title变量
+let formulaText = ref(""); //
+let formulaTitle = ref(""); // 公式显示Title变量
 let mirrorTitle = ref(""); //镜像公式显示Title变量
-
+let mirrorCode = ref(""); //镜像公式编码
 type formula = {
   formula: string[];
   reverseFormula: string[];
@@ -484,28 +557,6 @@ const useLockedControls = true;
 if (process.client) controls = useLockedControls ? ERNO.Locked : ERNO.Freeform;
 //#endregion
 
-//切换公式时，改变显示Title
-function changeTitle(formula) {
-  if (formula.Code == undefined || formula.Code == "") {
-    formulaTitle.value = "";
-    return;
-  }
-  formulaTitle.value = `<div  class="flex justify-center text-2xl">${
-    formula.Code
-  }-${formula.ThinkCode}--${colorFormatter(formula.ColorDesc)}</div>`;
-}
-//切换公式时，改变镜像公式显示Title
-function changeMirrorTitle(formula) {
-  if (formula.Code == undefined || formula.Code == "") {
-    mirrorTitle.value = "";
-    return;
-  }
-  const colorDesc =
-    formula.Code != "" ? formula.ColorDesc.split(",") : formula.ColorDesc;
-  mirrorTitle.value = `<div  class="flex justify-center text-2xl">${
-    formula.Code
-  }-${formula.ThinkCode}--${colorFormatter(formula.ColorDesc)}</div>`;
-}
 //获取公式数据
 await useFetch("/api/blind_formula").then((res) => {
   const data = res.data["_rawValue"];
@@ -632,6 +683,24 @@ blindFormula = blindFormula.sort(function (a, b) {
 });
 //#endregion
 
+function changeFormulaTitle(formula) {
+  if (formula.Code == undefined || formula.Code == "") {
+    formulaTitle.value = "";
+    return;
+  }
+  formulaTitle.value = `<div  class="flex justify-center text-2xl">${
+    formula.Code
+  }-${formula.ThinkCode}--${colorFormatter(formula.ColorDesc)}</div>`;
+}
+function changeMirrorTitle(formula) {
+  if (formula.Code == undefined || formula.Code == "") {
+    mirrorCode.value = "";
+    return;
+  }
+  mirrorCode.value = `<div  class="flex justify-center text-2xl">${
+    formula.Code
+  }-${formula.ThinkCode}--${colorFormatter(formula.ColorDesc)}</div>`;
+}
 //获取反向公式
 const getReverseFormula = (formula) => {
   const arr = formula.split(" ");
@@ -705,10 +774,10 @@ const rowClick = (row) => {
   localStorage.setItem("currentRow", JSON.stringify(row));
   rowBlindFormula = row;
   tempFormula.value = row.Formula;
-  changeTitle(rowBlindFormula);
+  changeFormulaTitle(row);
   let item = document.getElementById("simulator");
   item.innerHTML = "";
-  item = document.getElementById("left_right");
+  item = document.getElementById("mirrorSimulator");
   item.innerHTML = "";
   let mirror = getMirrorFormula(rowBlindFormula.Formula);
   let mirrorFormula = {};
@@ -718,14 +787,13 @@ const rowClick = (row) => {
   showNewFormula(row.Formula);
   if (tmp.length > 0) {
     mirrorFormula = tmp[0];
-    // showNewMirrorFormula(mirrorFormula.Formula);
+    showNewMirrorFormula(mirrorFormula.Formula);
   } else {
     mirrorFormula.Formula = reserve;
     mirrorFormula.Code = " ";
     mirrorFormula.ThinkCode = "";
     mirrorFormula.ColorDesc = reserve;
   }
-  changeMirrorTitle(mirrorFormula);
 };
 
 //显示临时输入的公式
@@ -884,7 +952,7 @@ const showNewFormula = (formula = "") => {
 
   const simulator = document.getElementById("simulator");
   newFormula = getNewFormula(formula);
-  formulaTitle.value = formula;
+  formulaText.value = formula;
 
   currentIndex.value = -1;
   formulaLength = formula.split(" ").length;
@@ -902,7 +970,6 @@ const showNewFormula = (formula = "") => {
   }
 
   if (newFormula.reverseFormula != "") {
-    console.log("formula", newFormula.newReverseFormula);
     cubeGLEdge.twist(newFormula.newReverseFormula);
   }
   cubeGLEdge.formulas = newFormula;
@@ -912,7 +979,7 @@ const showNewMirrorFormula = (formula = "") => {
   if (process.server) return;
   cubeCorner = new Cube();
   Cube.initSolver();
-
+  changeMirrorTitle(formula);
   let controls = ERNO.Locked;
 
   window.cubeGLCorner = new ERNO.Cube({
@@ -924,15 +991,24 @@ const showNewMirrorFormula = (formula = "") => {
   });
   cubeGLCorner.twistDuration = 300; //旋转速度
 
-  const left_right = document.getElementById("left_right");
+  const mirror = document.getElementById("mirrorSimulator");
   mirrorNewFormula = getNewFormula(formula);
-  mirrorTitle.value = mirrorNewFormula.formula;
+  mirrorTitle.value = formula;
+  let mirrorFormula = {};
+  const tmp = blindFormula.filter(
+    (r) => r.Formula == formula && r.Type == typeValue.value
+  );
+  if (tmp.length > 0) {
+    changeMirrorTitle(tmp[0]);
+  } else {
+    mirrorCode.value = "未找到";
+  }
   mirrorFormulaLength = mirrorNewFormula.formula.split(" ").length;
 
-  left_right.childNodes.forEach((item) => {
-    left_right.removeChild(item);
+  mirror.childNodes.forEach((item) => {
+    mirror.removeChild(item);
   });
-  left_right.appendChild(cubeGLCorner.domElement);
+  mirror.appendChild(cubeGLCorner.domElement);
   if (controls === ERNO.Locked) {
     const fixedOrientation = new THREE.Euler(Math.PI * 0.1, Math.PI * -0.25, 0);
     cubeGLCorner.object3D.lookAt(cubeGLCorner.camera.position);
@@ -941,10 +1017,9 @@ const showNewMirrorFormula = (formula = "") => {
     cubeGLCorner.rotation.z += fixedOrientation.z;
   }
   if (mirrorNewFormula.reverseFormula != "") {
-    console.log("mirror", mirrorNewFormula.newReverseFormula);
     cubeGLCorner.twist(mirrorNewFormula.newReverseFormula);
   }
-  cubeGLEdge.miformulas = mirrorNewFormula;
+  cubeGLCorner.formulas = mirrorNewFormula;
 };
 //转换新公式
 function getNewFormula(formula) {
@@ -1015,12 +1090,30 @@ const changeStep = (step, formulaLength) => {
 
 //改变镜像公式步骤
 const changeMirrorStep = (step, formulaLength) => {
-  if (step == -1) {
-    if (currentIndex.value == 0) return;
-  } else {
-    if (currentIndex.value >= formulaLength) return;
+  if (step == 999) {
+    mirrorCurrentIndex.value = -1;
+    showNewMirrorFormula(cubeGLCorner.formulas.formula);
+    return;
   }
-  currentIndex.value += step;
+  let f = [];
+  let i;
+  if (step == -1) {
+    if (mirrorCurrentIndex.value == -1) return;
+    f = cubeGLCorner.formulas.reverseFormula.split(" ");
+    i = f.length - mirrorCurrentIndex.value - 1;
+  } else {
+    if (mirrorCurrentIndex.value >= mirrorFormulaLength) return;
+    i = mirrorCurrentIndex.value + 1;
+    f = cubeGLCorner.formulas.formula.split(" ");
+  }
+  for (let i = 0; i < f.length; i++) {
+    if (f[i] == "" || f[i] == " ") f.remove(i);
+  }
+  let twist = getNewFormula(f[i]);
+  twist = twist.newFormula;
+  console.log(twist);
+  cubeGLCorner.twist(twist);
+  mirrorCurrentIndex.value += step;
 };
 //保存修改公式
 async function saveFormula(formEl) {
