@@ -247,8 +247,8 @@ Object.assign(twistFormula, { "F'": "f", F: "F", F2: "F F" });
 Object.assign(unDoFormulas, { "L'": "L", L: "l", L2: "L L" });
 Object.assign(twistFormula, { "L'": "l", L: "L", L2: "L L" });
 
-Object.assign(unDoFormulas, { "M'": "m", M: "M", M2: "M M" });
-Object.assign(twistFormula, { "M'": "M", M: "m", M2: "M M" });
+Object.assign(unDoFormulas, { "M'": "M", M: "m", M2: "M M" });
+Object.assign(twistFormula, { "M'": "m", M: "M", M2: "M M" });
 
 Object.assign(unDoFormulas, { "S'": "S", S: "s", S2: "S S" });
 Object.assign(twistFormula, { "S'": "s", S: "S", S2: "S S" });
