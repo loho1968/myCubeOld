@@ -192,21 +192,23 @@
                           </div>
                           <div class="flex justify-between">
                             <div class="flex mt-2">
-                              <el-button text
+                              <el-button
+                                :disabled="currentIndex == -1"
+                                text
+                                @click="changeStep(999, formulaLength)"
                                 ><el-icon size="30"><DArrowLeft /></el-icon
                               ></el-button>
                               <el-button
+                                :disabled="currentIndex == -1"
                                 text
                                 @click="changeStep(-1, formulaLength)"
                                 ><el-icon size="30"><ArrowLeft /></el-icon
                               ></el-button>
                               <el-button
+                                :disabled="currentIndex == formulaLength - 1"
                                 text
                                 @click="changeStep(1, formulaLength)"
                                 ><el-icon size="30"><ArrowRight /></el-icon
-                              ></el-button>
-                              <el-button text
-                                ><el-icon size="30"><VideoPlay /></el-icon
                               ></el-button>
                             </div>
                             <client-only>
@@ -985,6 +987,11 @@ function getNewFormula(formula) {
 
 //改变公式步骤
 const changeStep = (step, formulaLength) => {
+  if (step == 999) {
+    currentIndex.value = -1;
+    showNewFormula(cubeGLEdge.formulas.formula);
+    return;
+  }
   let f = [];
   let i;
   if (step == -1) {
