@@ -162,19 +162,16 @@
                       class="border-2 w-1/2 h-[100vh] flex flex-col items-center"
                     >
                       <div v-show="formulaTitle">
-                        <div class="mt-[50px] w-full text-center">
+                        <div class="w-full text-center">
                           <div
-                            class="flex justify-center text-2xl font-medium mt-[50px] text-center"
+                            class="flex justify-between text-2xl font-medium mt-[15px] text-center"
                           >
                             <div v-for="(t, index) in formulaTitle.split(' ')">
                               <div v-if="t.indexOf('2') > -1">
                                 <el-badge :value="2" class="" type="info">
                                   <div
                                     :class="[
-                                      'mr-3',
-                                      'mt-2',
-                                      'ml-2',
-                                      index <= currentIndex - 1
+                                      index <= currentIndex
                                         ? 'bg-blue-300'
                                         : '',
                                     ]"
@@ -186,11 +183,7 @@
                               <div
                                 v-else
                                 :class="[
-                                  'mt-2',
-                                  'mx-2',
-                                  index <= currentIndex - 1
-                                    ? 'bg-blue-300'
-                                    : '',
+                                  index <= currentIndex ? 'bg-blue-300' : '',
                                 ]"
                               >
                                 {{ t }}
@@ -198,33 +191,27 @@
                             </div>
                           </div>
                           <div class="flex justify-between">
-                            <div class="flex text-center">
-                              <el-icon
-                                class="hover:border-2 hover:cursor-pointer"
-                                size="36"
-                                ><DArrowLeft
-                              /></el-icon>
-                              <el-icon
-                                class="hover:border-2 hover:cursor-pointer ml-4"
-                                size="36"
+                            <div class="flex mt-2">
+                              <el-button text
+                                ><el-icon size="30"><DArrowLeft /></el-icon
+                              ></el-button>
+                              <el-button
+                                text
                                 @click="changeStep(-1, formulaLength)"
-                                ><ArrowLeft
-                              /></el-icon>
-                              <el-icon
-                                class="hover:border-2 hover:cursor-pointer ml-4"
-                                size="36"
+                                ><el-icon size="30"><ArrowLeft /></el-icon
+                              ></el-button>
+                              <el-button
+                                text
                                 @click="changeStep(1, formulaLength)"
-                                ><ArrowRight
-                              /></el-icon>
-                              <el-icon
-                                class="hover:border-2 hover:cursor-pointer ml-4"
-                                size="36"
-                                ><VideoPlay
-                              /></el-icon>
+                                ><el-icon size="30"><ArrowRight /></el-icon
+                              ></el-button>
+                              <el-button text
+                                ><el-icon size="30"><VideoPlay /></el-icon
+                              ></el-button>
                             </div>
                             <client-only>
                               <div class="ml-10 mt-2 text-3xl min-w-[40px]">
-                                {{ currentIndex }}/{{ formulaLength }}
+                                {{ currentIndex + 1 }}/{{ formulaLength }}
                               </div>
                             </client-only>
                           </div>
@@ -998,18 +985,21 @@ function getNewFormula(formula) {
 
 //改变公式步骤
 const changeStep = (step, formulaLength) => {
+  let f = [];
+  let i;
   if (step == -1) {
-    if (currentIndex.value == 0) return;
+    if (currentIndex.value == -1) return;
+    f = cubeGLEdge.formulas.reverseFormula.split(" ");
+    i = f.length - currentIndex.value - 1;
   } else {
     if (currentIndex.value >= formulaLength) return;
+    i = currentIndex.value + 1;
+    f = cubeGLEdge.formulas.formula.split(" ");
   }
-
-  let f = cubeGLEdge.formula.formula.split(" ");
   for (let i = 0; i < f.length; i++) {
     if (f[i] == "" || f[i] == " ") f.remove(i);
   }
-  let t = f[currentIndex.value + 1];
-  let twist = getNewFormula(t);
+  let twist = getNewFormula(f[i]);
   twist = twist.newFormula;
   console.log(twist);
   cubeGLEdge.twist(twist);
