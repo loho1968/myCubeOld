@@ -132,10 +132,7 @@
                   </template>
                 </el-table-column>
               </el-table>
-              <div
-                v-show="searchFormulaCode == ''"
-                class="example-pagination-block"
-              >
+              <div v-show="searchFormulaCode == ''">
                 <!-- <div class="example-demonstration">分页</div> -->
                 <el-pagination
                   v-model:current-page="currentPage"
@@ -151,6 +148,9 @@
                   @size-change="handleSizeChange"
                 />
               </div>
+              <!--              <div>-->
+              <!--                <el-image class="mt-2 w-full" src="assets/twist.jpg" />-->
+              <!--              </div>-->
             </div>
           </div>
           <div class="mr-auto w-full flex flex-col justify-between">
@@ -579,6 +579,7 @@ await useFetch("/api/blind_formula").then((res) => {
     blindFormulaGroup = <BlindFormulaGroup[]>data.blindFormulaGroup;
     blindFormulaCode = <BlindFormulaCode[]>data.blindFormulaCode;
     blindFormula = <BlindFormula[]>data.blindFormula;
+    state.total = blindFormula.length;
   } else {
     if (data != null && data.code != 200) {
       ElMessage.error(data.msg);
