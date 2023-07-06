@@ -168,17 +168,22 @@
                           >
                             <div v-for="(t, index) in formulaText.split(' ')">
                               <div v-if="t.indexOf('2') > -1">
-                                <el-badge :value="2" class="" type="info">
-                                  <div
-                                    :class="[
-                                      index <= currentIndex
-                                        ? 'bg-blue-300'
-                                        : '',
-                                    ]"
-                                  >
-                                    {{ t.substring(0, 1) }}
-                                  </div>
-                                </el-badge>
+                                <span
+                                  :class="[
+                                    index <= currentIndex ? 'bg-blue-300' : '',
+                                  ]"
+                                >
+                                  {{ t.substring(0, 1) }}
+                                </span>
+                                <span
+                                  :class="[
+                                    'align-super',
+                                    'text-xs',
+                                    index <= currentIndex ? 'bg-blue-300' : '',
+                                  ]"
+                                >
+                                  {{ 2 }}
+                                </span>
                               </div>
                               <div
                                 v-else
@@ -232,17 +237,26 @@
                           >
                             <div v-for="(t, index) in mirrorTitle.split(' ')">
                               <div v-if="t.indexOf('2') > -1">
-                                <el-badge :value="2" class="" type="info">
-                                  <div
-                                    :class="[
-                                      index <= mirrorCurrentIndex
-                                        ? 'bg-blue-300'
-                                        : '',
-                                    ]"
-                                  >
-                                    {{ t.substring(0, 1) }}
-                                  </div>
-                                </el-badge>
+                                <span
+                                  :class="[
+                                    index <= mirrorCurrentIndex
+                                      ? 'bg-blue-300'
+                                      : '',
+                                  ]"
+                                >
+                                  {{ t.substring(0, 1) }}
+                                </span>
+                                <span
+                                  :class="[
+                                    'align-super',
+                                    'text-xs',
+                                    index <= mirrorCurrentIndex
+                                      ? 'bg-blue-300'
+                                      : '',
+                                  ]"
+                                >
+                                  {{ 2 }}
+                                </span>
                               </div>
                               <div
                                 v-else
@@ -994,6 +1008,7 @@ const showNewMirrorFormula = (formula = "") => {
   const mirror = document.getElementById("mirrorSimulator");
   mirrorNewFormula = getNewFormula(formula);
   mirrorTitle.value = formula;
+  mirrorCurrentIndex.value = -1;
   let mirrorFormula = {};
   const tmp = blindFormula.filter(
     (r) => r.Formula == formula && r.Type == typeValue.value
