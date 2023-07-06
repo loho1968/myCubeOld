@@ -457,32 +457,35 @@ let formulaTitle = ref(""); //公式显示Title变量
 let mirrorTitle = ref(""); //镜像公式显示Title变量
 
 type formula = {
-  twistFormula: string[];
-  unDoFormula: string[];
+  formula: string[];
+  reverseFormula: string[];
+  newFormula: string[];
+  newReverseFormula: string[];
 };
 let cubeEdge, cubeCorner; //魔方棱块和角块对象
-const twistFormulaSetup = {}; //公式转换配置对象
+const newFormulaSetup = {}; //公式转换配置对象
 
 //#region 公式代码转换对象
-Object.assign(twistFormulaSetup, { "x'": "x", x: "X", x2: "X X" });
-Object.assign(twistFormulaSetup, { "R'": "r", R: "R", R2: "R R" });
-Object.assign(twistFormulaSetup, { "B'": "b", B: "B", B2: "B B" });
-Object.assign(twistFormulaSetup, { "D'": "d", D: "D", D2: "D D" });
-Object.assign(twistFormulaSetup, { "E'": "e", E: "E", E2: "D D" });
-Object.assign(twistFormulaSetup, { "F'": "f", F: "F", F2: "F F" });
-Object.assign(twistFormulaSetup, { "L'": "l", L: "L", L2: "L L" });
-Object.assign(twistFormulaSetup, { "M'": "m", M: "M", M2: "M M" });
-Object.assign(twistFormulaSetup, { "S'": "s", S: "S", S2: "S S" });
-Object.assign(twistFormulaSetup, { "U'": "u", U: "U", U2: "U U" });
-Object.assign(twistFormulaSetup, { "F'": "f", F: "F", F2: "F F" });
-Object.assign(twistFormulaSetup, { "r'": "M r", r: "m R", r2: "M M R R" });
-Object.assign(twistFormulaSetup, { "u'": "u e", u: "U E", u2: "U U E E" });
-Object.assign(twistFormulaSetup, { "f'": "s f", f: "S F", f2: "S S F F" });
-Object.assign(twistFormulaSetup, { "l'": "Xr", l: "x R" });
+Object.assign(newFormulaSetup, { "x'": "x", x: "X", x2: "X X" });
+Object.assign(newFormulaSetup, { "R'": "r", R: "R", R2: "R R" });
+Object.assign(newFormulaSetup, { "B'": "b", B: "B", B2: "B B" });
+Object.assign(newFormulaSetup, { "D'": "d", D: "D", D2: "D D" });
+Object.assign(newFormulaSetup, { "E'": "e", E: "E", E2: "D D" });
+Object.assign(newFormulaSetup, { "F'": "f", F: "F", F2: "F F" });
+Object.assign(newFormulaSetup, { "L'": "l", L: "L", L2: "L L" });
+Object.assign(newFormulaSetup, { "M'": "m", M: "M", M2: "M M" });
+Object.assign(newFormulaSetup, { "S'": "s", S: "S", S2: "S S" });
+Object.assign(newFormulaSetup, { "U'": "u", U: "U", U2: "U U" });
+Object.assign(newFormulaSetup, { "F'": "f", F: "F", F2: "F F" });
+Object.assign(newFormulaSetup, { "r'": "M r", r: "m R", r2: "M M R R" });
+Object.assign(newFormulaSetup, { "u'": "u e", u: "U E", u2: "U U E E" });
+Object.assign(newFormulaSetup, { "f'": "s f", f: "S F", f2: "S S F F" });
+Object.assign(newFormulaSetup, { "l'": "Xr", l: "x R" });
 //#endregion
 
 //转换后的新公式
-let newFormula = <formula>reactive({ twistFormula: "", unDoFormula: "" });
+let newFormula = <formula>reactive({});
+let mirrorNewFormula = <formula>reactive({});
 let formulaLength = ref(0); //公式步骤数量
 let mirrorFormulaLength = ref(0); //镜像公式步骤数量
 let currentIndex = ref(0); //当前步骤
@@ -726,7 +729,7 @@ const rowClick = (row) => {
   showNewFormula(row.Formula);
   if (tmp.length > 0) {
     mirrorFormula = tmp[0];
-    showNewMirrorFormula(mirrorFormula.Formula);
+    // showNewMirrorFormula(mirrorFormula.Formula);
   } else {
     mirrorFormula.Formula = reserve;
     mirrorFormula.Code = " ";
@@ -835,7 +838,6 @@ const getMirrorFormula = (formula) => {
 const editFormula = (row) => {
   vueInstance.refs.formulaTable.setCurrentRow(row);
   rowBlindFormula = row;
-  console.log(rowBlindFormula.value);
   dialogFormVisible.value = true;
 };
 
@@ -876,9 +878,9 @@ const colorFormatter = (colorDesc) => {
 //显示新公式
 const showNewFormula = (formula = "") => {
   if (process.server) return;
+
   cubeEdge = new Cube();
   Cube.initSolver();
-
   let controls = ERNO.Locked;
   //controls=ERNO.Freeform;
 
@@ -894,9 +896,10 @@ const showNewFormula = (formula = "") => {
   const simulator = document.getElementById("simulator");
   newFormula = getNewFormula(formula);
   formulaTitle.value = formula;
+
+  currentIndex.value = -1;
   formulaLength = formula.split(" ").length;
 
-  console.log(newFormula);
   simulator.childNodes.forEach((item) => {
     simulator.removeChild(item);
   });
@@ -909,10 +912,11 @@ const showNewFormula = (formula = "") => {
     cubeGLEdge.rotation.z += fixedOrientation.z;
   }
 
-  if (newFormula.unDoFormula != "") {
-    cubeGLEdge.formula = newFormula;
-    cubeGLEdge.twist(newFormula.twistFormula);
+  if (newFormula.reverseFormula != "") {
+    console.log("formula", newFormula.newReverseFormula);
+    cubeGLEdge.twist(newFormula.newReverseFormula);
   }
+  cubeGLEdge.formulas = newFormula;
 };
 
 const showNewMirrorFormula = (formula = "") => {
@@ -932,11 +936,9 @@ const showNewMirrorFormula = (formula = "") => {
   cubeGLCorner.twistDuration = 300; //旋转速度
 
   const left_right = document.getElementById("left_right");
-  newFormula = getNewFormula(formula);
-  mirrorTitle.value = formula;
-  mirrorFormulaLength = formula.split(" ").length;
-
-  console.log(newFormula);
+  mirrorNewFormula = getNewFormula(formula);
+  mirrorTitle.value = mirrorNewFormula.formula;
+  mirrorFormulaLength = mirrorNewFormula.formula.split(" ").length;
 
   left_right.childNodes.forEach((item) => {
     left_right.removeChild(item);
@@ -949,47 +951,73 @@ const showNewMirrorFormula = (formula = "") => {
     cubeGLCorner.rotation.y += fixedOrientation.y;
     cubeGLCorner.rotation.z += fixedOrientation.z;
   }
-  if (newFormula.twistFormula != "") {
-    cubeGLCorner.formula = newFormula;
-    cubeGLCorner.twist(newFormula.twistFormula);
+  if (mirrorNewFormula.reverseFormula != "") {
+    console.log("mirror", mirrorNewFormula.newReverseFormula);
+    cubeGLCorner.twist(mirrorNewFormula.newReverseFormula);
   }
+  cubeGLEdge.miformulas = mirrorNewFormula;
 };
 //转换新公式
 function getNewFormula(formula) {
   if (formula == "") return "";
-  let unDoResult = "";
-  let twistResult = "";
-  let arr = formula.split(" ");
-  const reverseFormula = getReverseFormula(formula);
-  console.log(reverseFormula);
-  arr = reverseFormula.split(" ");
+  let result = <formula>{};
+  result.formula = formula;
+  let reverseFormula = "";
+  let newFormula = "";
+  let newReverseFormula = "";
+  let arr;
+  let revserseArr;
+  reverseFormula = getReverseFormula(formula);
+  result.reverseFormula = reverseFormula;
+  revserseArr = reverseFormula.split(" ");
+  arr = formula.split(" ");
   for (let i = 0; i < arr.length; i++) {
     arr[i] = arr[i].replace(" ", "");
     if (arr[i] == "") continue;
-    if (twistFormulaSetup[arr[i]] == undefined) {
-      ElMessage.error(arr[i] + " 未找到--twistResult");
+    if (newFormulaSetup[arr[i]] == undefined) {
+      ElMessage.error(arr[i] + " 未找到");
       continue;
     }
-    twistResult += " " + twistFormulaSetup[arr[i]];
+    newFormula += " " + newFormulaSetup[arr[i]];
   }
-  twistResult = twistResult.substring(1);
-  arr = reverseFormula.split(" ");
-  for (let i = 0; i < arr.length; i++) {
-    arr[i] = arr[i].replace(" ", "");
-    if (arr[i] == "") continue;
-    if (twistFormulaSetup[arr[i]] == undefined) {
-      ElMessage.error(arr[i] + " 未找到--unDoResult");
+  newFormula = newFormula.substring(1);
+  result.newFormula = newFormula;
+  for (let i = 0; i < revserseArr.length; i++) {
+    revserseArr[i] = revserseArr[i].replace(" ", "");
+    if (revserseArr[i] == "") continue;
+    if (newFormulaSetup[revserseArr[i]] == undefined) {
+      ElMessage.error(revserseArr[i] + " 未找到");
       continue;
     }
-    unDoResult += " " + twistFormulaSetup[arr[i]];
+    newReverseFormula += " " + newFormulaSetup[revserseArr[i]];
   }
-  unDoResult = unDoResult.substring(1);
-  return { unDoFormula: unDoResult, twistFormula: twistResult };
+  newReverseFormula = newReverseFormula.substring(1);
+  result.newReverseFormula = newReverseFormula;
+  return result;
 }
 
 //改变公式步骤
 const changeStep = (step, formulaLength) => {
-  console.log(currentIndex.value, formulaLength);
+  if (step == -1) {
+    if (currentIndex.value == 0) return;
+  } else {
+    if (currentIndex.value >= formulaLength) return;
+  }
+
+  let f = cubeGLEdge.formula.formula.split(" ");
+  for (let i = 0; i < f.length; i++) {
+    if (f[i] == "" || f[i] == " ") f.remove(i);
+  }
+  let t = f[currentIndex.value + 1];
+  let twist = getNewFormula(t);
+  twist = twist.newFormula;
+  console.log(twist);
+  cubeGLEdge.twist(twist);
+  currentIndex.value += step;
+};
+
+//改变镜像公式步骤
+const changeMirrorStep = (step, formulaLength) => {
   if (step == -1) {
     if (currentIndex.value == 0) return;
   } else {
@@ -997,13 +1025,12 @@ const changeStep = (step, formulaLength) => {
   }
   currentIndex.value += step;
 };
-
 //保存修改公式
 async function saveFormula(formEl) {
   if (!formEl) return;
   formEl.validate((valid) => {
     if (!valid) {
-      console.log("error submit!");
+      console.error("error submit!");
       return false;
     }
   });
@@ -1023,9 +1050,8 @@ async function saveFormula(formEl) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   }).then((res) => {
-    console.log(res);
+    console.error(res);
   });
-  console.log(result);
 }
 
 //#region 编辑公式校验
