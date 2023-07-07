@@ -234,7 +234,7 @@ import { useRowStore } from "~/stores/row";
 import { usePageStore } from "~/stores/page";
 
 useHead({
-  title: "魔方练习2",
+  title: "魔方盲拧练习",
   script: [
     { src: "/static/js/jquery-3.7.0.min.js" },
     { src: "/static/js/roofpig_and_three.js" },

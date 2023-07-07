@@ -385,7 +385,7 @@ import {
 } from "@element-plus/icons-vue";
 
 useHead({
-  title: "魔方练习2",
+  title: "魔方盲拧练习2",
   link: [{ rel: "stylesheet", href: "/static/lib/cuber/css/cuber.css" }],
   script: [
     { src: "/static/lib/cuber/js/vendor/tween.min.js" },
