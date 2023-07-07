@@ -41,6 +41,10 @@
               M-垂直中间</el-text
             >
           </div>
+          <div class="mr-4">
+            <NuxtLink to="/cfop">CFOP</NuxtLink>
+            <NuxtLink to="/bcode">盲拧2</NuxtLink>
+          </div>
         </div>
         <div class=""></div>
         <div class="flex justify-between items-center">
@@ -720,13 +724,13 @@ const validateCode = (rule: any, value: any, callback: any) => {
 //助记码
 const validateThinkCode = (rule: any, value: any, callback: any) => {
   if (value === "") {
-      return callback(new Error("必须输入助记码"));
+    return callback(new Error("必须输入助记码"));
   }
 };
 //公式
 const validateFormula = (rule: any, value: any, callback: any) => {
   if (value === "") {
-      return callback(new Error("必须输入公式"));
+    return callback(new Error("必须输入公式"));
   }
 };
 //校验规则组合

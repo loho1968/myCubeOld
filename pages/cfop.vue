@@ -30,6 +30,10 @@
               M-垂直中间</el-text
             >
           </div>
+          <div class="ml-4 ">
+            <NuxtLink to="/">盲拧</NuxtLink>
+            <NuxtLink to="/bcode">盲拧2</NuxtLink>
+          </div>
         </div>
         <div class=""></div>
         <div class="flex justify-between items-center">

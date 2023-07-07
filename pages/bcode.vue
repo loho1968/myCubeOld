@@ -41,6 +41,10 @@
               M-垂直中间</el-text
             >
           </div>
+          <div class="mr-4 bg-blue-400">
+            <NuxtLink to="/">盲拧</NuxtLink>
+            <NuxtLink to="/cfop">CFOP</NuxtLink>
+          </div>
         </div>
         <div class=""></div>
         <div class="flex justify-between items-center">
