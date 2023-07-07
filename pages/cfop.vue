@@ -414,7 +414,8 @@ const rowClick = (row) => {
   const colored = getFormulaColor(typeValue.value);
 
   CreateFormulaDisplay("simulator", row.Formula, colored);
-
+  item = document.getElementById("mirror");
+  item.innerHTML = "";
   CreateFormulaDisplay("mirror", mirrorFormula, colored);
 };
 
