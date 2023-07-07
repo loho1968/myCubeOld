@@ -543,12 +543,14 @@ const editFormula = (row) => {
 };
 
 const addFormula = () => {
-  rowCFOP = reactive({ Type: "",
-      Formula: "",
-      OtherFormula: "",
-      ID: "",
-      Name: "",
-      Code: "",});
+  rowCFOP = reactive({
+    Type: "",
+    Formula: "",
+    OtherFormula: "",
+    ID: "",
+    Name: "",
+    Code: "",
+  });
   dialogFormVisible.value = true;
 };
 //保存修改公式
@@ -573,14 +575,13 @@ async function saveFormula(formEl) {
   data.Formula = rowCFOP.Formula;
   data.ID = rowCFOP.ID;
 
-  // const result = await $fetch(`/api/cfop`, {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify(data),
-  // }).then((res) => {
-  //   console.log(res);
-  // });
-  // console.log(result);
+  const result = await $fetch(`/api/cfop`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  }).then((res) => {
+    ElMessage.error(res);
+  });
 }
 
 //#region 编辑公式校验
@@ -592,7 +593,6 @@ const rules = reactive<FormRules<typeof rowCFOP>>({
   Name: [{ required: true, message: "必须输入名称", trigger: "blur" }],
   Formula: [{ required: true, message: "必须输入公式", trigger: "blur" }],
 });
-
 
 //重置表单
 const resetForm = (formEl: FormInstance | undefined) => {
