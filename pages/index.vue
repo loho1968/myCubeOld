@@ -354,7 +354,7 @@ function changeMirrorTitle(formula) {
   }-${formula.ThinkCode}--${colorFormatter(formula.ColorDesc)}</div>`;
 }
 //获取公式数据
-await useFetch("/api/blind_formula").then((res) => {
+await useFetch("/api/formula").then((res) => {
   const data = res.data["_rawValue"];
   if (data != null && data.code == 200) {
     cfopList = <CFOP[]>data.cfop;
@@ -714,19 +714,19 @@ async function saveFormula(formEl) {
 //编码
 const validateCode = (rule: any, value: any, callback: any) => {
   if (value === "") {
-    callback(new Error("必须输入编码"));
+    return callback(new Error("必须输入编码"));
   }
 };
 //助记码
 const validateThinkCode = (rule: any, value: any, callback: any) => {
   if (value === "") {
-    callback(new Error("必须输入助记码"));
+      return callback(new Error("必须输入助记码"));
   }
 };
 //公式
 const validateFormula = (rule: any, value: any, callback: any) => {
   if (value === "") {
-    callback(new Error("必须输入公式"));
+      return callback(new Error("必须输入公式"));
   }
 };
 //校验规则组合

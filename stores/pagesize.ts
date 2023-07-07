@@ -1,5 +1,5 @@
 export const usePageSizeStore = defineStore(
-    "pagesize",
+    "pageSize",
     () => {
         // @ts-ignore
         let size = ref(30);
@@ -9,7 +9,7 @@ export const usePageSizeStore = defineStore(
     },
     {
         persist: process.client && {
-            key: "pagesize",
+            key: "pageSize",
             storage: persistedState.localStorage,
         },
     }

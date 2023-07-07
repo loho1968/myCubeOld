@@ -46,7 +46,6 @@ model BlindFormulaGroup {
 model CFOP {
   Type         String?
   Formula      String?
-  OtherFormula String?
   ID           String  @id @default(uuid())
   Name         String?
   Code         String?

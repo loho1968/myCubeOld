@@ -572,7 +572,7 @@ if (process.client) controls = useLockedControls ? ERNO.Locked : ERNO.Freeform;
 //#endregion
 
 //获取公式数据
-await useFetch("/api/blind_formula").then((res) => {
+await useFetch("/api/formula").then((res) => {
   const data = res.data["_rawValue"];
   if (data != null && data.code == 200) {
     cfopList = <CFOP[]>data.cfop;
