@@ -35,15 +35,14 @@
               />
             </div>
           </div>
-          <div>
-            <el-text type="primary"
-              >F-前面 B-后面 R-右面 L左面 U-上面 D-下面 S-中间 E-水平中间
-              M-垂直中间</el-text
-            >
-          </div>
+
           <div class="mr-4">
-            <NuxtLink to="/cfop">CFOP</NuxtLink>
-            <NuxtLink to="/bcode">盲拧2</NuxtLink>
+            <NuxtLink class="mx-4" to="/cfop"
+              ><el-link type="primary">CFOP</el-link></NuxtLink
+            >
+            <NuxtLink class="mx-4" to="/bcode"
+              ><el-link type="primary">盲拧2</el-link></NuxtLink
+            >
           </div>
         </div>
         <div class=""></div>

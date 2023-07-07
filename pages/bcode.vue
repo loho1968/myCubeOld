@@ -42,8 +42,12 @@
             >
           </div>
           <div class="mr-4 bg-blue-400">
-            <NuxtLink to="/">盲拧</NuxtLink>
-            <NuxtLink to="/cfop">CFOP</NuxtLink>
+            <NuxtLink class="mx-4" to="/"
+              ><el-link type="primary">盲拧</el-link></NuxtLink
+            >
+            <NuxtLink class="mx-4" to="/CFOP"
+              ><el-link type="primary">CFOP</el-link></NuxtLink
+            >
           </div>
         </div>
         <div class=""></div>
