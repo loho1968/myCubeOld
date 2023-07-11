@@ -30,9 +30,13 @@
               M-垂直中间</el-text
             >
           </div>
-          <div class="ml-4 ">
-            <NuxtLink to="/">盲拧</NuxtLink>
-            <NuxtLink to="/bcode">盲拧2</NuxtLink>
+          <div class="ml-4">
+            <NuxtLink class="mx-4" to="/"
+              ><el-link type="primary">盲拧</el-link></NuxtLink
+            >
+            <NuxtLink class="mx-4" to="/bcode"
+              ><el-link type="primary">盲拧2</el-link></NuxtLink
+            >
           </div>
         </div>
         <div class=""></div>
@@ -73,10 +77,10 @@
             <div>
               <div class="m-2">
                 <el-button
+                  :icon="Plus"
                   size="large"
                   type="success"
                   @click="addFormula()"
-                  :icon="Plus"
                   >新增</el-button
                 >
               </div>
@@ -120,10 +124,10 @@
                 <el-table-column label="" width="61">
                   <template #default="scope">
                     <el-button
+                      :icon="EditPen"
                       size="small"
                       type="primary"
                       @click="editFormula(scope.row)"
-                      :icon="EditPen"
                     ></el-button>
                   </template>
                 </el-table-column>
@@ -213,7 +217,7 @@
 <!--suppress TypeScriptUnresolvedReference -->
 <script lang="ts" setup>
 //#region 基础:import 变量声明等
-import { Moon, Sunny, VideoPlay, EditPen, Plus } from "@element-plus/icons-vue";
+import { EditPen, Moon, Plus, Sunny, VideoPlay } from "@element-plus/icons-vue";
 import type CFOP from "@prisma/client";
 import { useDark, useToggle } from "@vueuse/core";
 import type { FormInstance, FormRules } from "element-plus";
