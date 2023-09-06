@@ -516,18 +516,24 @@ const rowClick = (row) => {
   item.innerHTML = "";
   item = document.getElementById("left_right");
   item.innerHTML = "";
-  let reserve = getMirrorFormula(rowBlindFormula.Formula);
-  let reserveFormula = {};
-  const tmp = blindFormula.filter(
-    (r) => r.Formula == reserve && r.Type == row.Type
+  let reserve="";
+  let tmp=[];
+  if(rowBlindFormula.MirrorCode===null || rowBlindFormula.MirrorCode===""){
+    console.log("自动计算镜像公式");
+    reserve = getMirrorFormula(rowBlindFormula.Formula);
+  }else{
+    tmp= blindFormula.filter(
+    (r) => r.Code === rowBlindFormula.MirrorCode 
   );
-
+  }
+  let reserveFormula = {};
+  console.log(rowBlindFormula.MirrorCode);
   if (tmp.length > 0) {
     reserveFormula = tmp[0];
   } else {
     reserveFormula.Formula = reserve;
     reserveFormula.Code = " ";
-    reserveFormula.ThinkCode = "";
+    reserveFormula.ThinkCode = " ";
     reserveFormula.ColorDesc = reserve;
   }
   changeMirrorTitle(reserveFormula);
