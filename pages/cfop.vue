@@ -179,7 +179,6 @@
     <el-form
       ref="ruleFormRef"
       :model="rowCFOP"
-      :rules="rules"
       label-position="top"
       size="large"
       status-icon
@@ -220,18 +219,13 @@
 import { EditPen, Moon, Plus, Sunny, VideoPlay } from "@element-plus/icons-vue";
 import type CFOP from "@prisma/client";
 import { useDark, useToggle } from "@vueuse/core";
-import type { FormInstance, FormRules } from "element-plus";
+import type { FormInstance } from "element-plus";
 import { useRowStore } from "~/stores/row";
 import { usePageStore } from "~/stores/page";
 import { usePageSizeStore } from "~/stores/pageSize";
 
 useHead({
   title: "魔方CFOP",
-  script: [
-    { src: "/static/js/jquery-3.7.0.min.js" },
-    { src: "/static/js/roofpig_and_three.js" },
-  ],
-  link: [{ rel: "stylesheet", href: "/static/css/cube.css" }],
 });
 
 //#region theme
@@ -594,14 +588,6 @@ async function saveFormula(formEl) {
 }
 
 //#region 编辑公式校验
-
-//校验规则组合
-const rules = reactive<FormRules<typeof rowCFOP>>({
-  Code: [{ required: true, message: "必须输入编码", trigger: "blur" }],
-  Type: [{ required: true, message: "必须输入类型", trigger: "blur" }],
-  Name: [{ required: true, message: "必须输入名称", trigger: "blur" }],
-  Formula: [{ required: true, message: "必须输入公式", trigger: "blur" }],
-});
 
 //重置表单
 const resetForm = (formEl: FormInstance | undefined) => {

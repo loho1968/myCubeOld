@@ -238,11 +238,11 @@ import { usePageStore } from "~/stores/page";
 
 useHead({
   title: "魔方盲拧练习",
-  script: [
-    { src: "/static/js/jquery-3.7.0.min.js" },
-    { src: "/static/js/roofpig_and_three.js" },
-  ],
-  link: [{ rel: "stylesheet", href: "/static/css/cube.css" }],
+  // script: [
+  //   { src: "static/js/jquery-3.7.0.min.js" },
+  //   { src: "static/js/roofpig_and_three.js" },
+  // ],
+  // link: [{ rel: "stylesheet", href: "/static/css/cube.css" }],
 });
 
 //#region theme
@@ -516,15 +516,16 @@ const rowClick = (row) => {
   item.innerHTML = "";
   item = document.getElementById("left_right");
   item.innerHTML = "";
-  let reserve="";
-  let tmp=[];
-  if(rowBlindFormula.MirrorCode===null || rowBlindFormula.MirrorCode===""){
+  let reserve = "";
+  let tmp = [];
+  if (
+    rowBlindFormula.MirrorCode === null ||
+    rowBlindFormula.MirrorCode === ""
+  ) {
     console.log("自动计算镜像公式");
     reserve = getMirrorFormula(rowBlindFormula.Formula);
-  }else{
-    tmp= blindFormula.filter(
-    (r) => r.Code === rowBlindFormula.MirrorCode 
-  );
+  } else {
+    tmp = blindFormula.filter((r) => r.Code === rowBlindFormula.MirrorCode);
   }
   let reserveFormula = {};
   console.log(rowBlindFormula.MirrorCode);
@@ -650,7 +651,6 @@ const getMirrorFormula = (formula) => {
 const editFormula = (row) => {
   vueInstance.refs.formulaTable.setCurrentRow(row);
   rowBlindFormula = row;
-  console.log(rowBlindFormula.value);
   dialogFormVisible.value = true;
 };
 
