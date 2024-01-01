@@ -152,7 +152,7 @@
           <div class="mr-auto w-full flex flex-col justify-between">
             <div class="">
               <div id="" class="flex-1">
-                <div class="flex justify-between w-full flex-col">
+                <div class="flex justify-between w-full items-center">
                   <div class="border-2 h-[550px] w-1/2">
                     <div
                       class="text-center w-1/2 mt-2 items-center"
@@ -244,6 +244,10 @@ let currentPage = ref(1); //当前页
 //#region 过滤类型
 const formulaType = [
   {
+    value: "全部",
+    label: "全部",
+  },
+  {
     value: "CROSS",
     label: "CROSS",
   },
@@ -286,7 +290,7 @@ const addType = [
     label: "特殊",
   },
 ];
-const typeValue = ref("F2L");
+const typeValue = ref("全部");
 //#endregion
 
 const pageSizeStore = usePageSizeStore(); //每页行数
